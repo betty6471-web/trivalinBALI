@@ -11,7 +11,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- html2canvas 圖片生成庫 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- Google 字型引入手寫字體 -->
+    <!-- Google 字型引入手寫字體與 Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Noto+Sans+TC:wght@300;400;500;700&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
     <style>
         body { 
@@ -196,7 +196,7 @@
                             <tr>
                                 <td class="p-2.5 font-medium">四段機票 (Scoot)</td>
                                 <td class="p-2.5 font-mono font-bold text-emerald-600">NT$ 58,862</td>
-                                <td class="p-2.5 text-slate-500">3/14 慈玉山卡 (已付)</td>
+                                <td class="p-2.5 text-slate-500">3/14 慈航 (已付)</td>
                             </tr>
                             <tr>
                                 <td class="p-2.5 font-medium">富邦海外旅遊險</td>
@@ -249,7 +249,7 @@
                             <tr>
                                 <td class="p-2.5 font-medium">7/23-7/25 新加坡住宿 (York Hotel)</td>
                                 <td class="p-2.5 font-mono font-bold text-emerald-600">NT$ 23,539</td>
-                                <td class="p-2.5 text-slate-500">4/6 慈玉山卡 (已付)</td>
+                                <td class="p-2.5 text-slate-500">4/6 慈航 (已付)</td>
                             </tr>
                             <tr>
                                 <td class="p-2.5 font-medium">DJB 漫遊網卡 (慈、川)</td>
@@ -372,18 +372,22 @@
                         </div>
                     </div>
 
-                    <!-- 照片上傳區 -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-600 mb-1">📸 上傳今日實拍照片 (最加回憶!)</label>
-                        <div class="flex items-center justify-center w-full">
-                            <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-50 transition">
-                                <div class="flex flex-col items-center justify-center pt-2.5 pb-2.5">
-                                    <i class="fa-solid fa-cloud-arrow-up text-gray-400 text-lg mb-1"></i>
-                                    <p class="text-[10px] text-gray-500"><span class="font-semibold">點擊</span>或拖曳照片上傳</p>
-                                    <p class="text-[8px] text-gray-400 mt-0.5">支援 JPG, PNG, WEBP</p>
+                    <!-- 照片上傳與 AI 生成區 -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-gray-600">📸 設定明信片背景 (上傳或 AI 智慧彩繪)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex flex-col items-center justify-center h-16 border border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-50 transition">
+                                <div class="flex flex-col items-center justify-center">
+                                    <i class="fa-solid fa-cloud-arrow-up text-gray-400 text-sm mb-1"></i>
+                                    <p class="text-[9px] text-gray-500 font-semibold">本機相片</p>
                                 </div>
                                 <input type="file" id="card-photo-input" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
                             </label>
+                            
+                            <button onclick="generateAIPosterImage(this)" class="flex flex-col items-center justify-center h-16 border border-indigo-200 bg-indigo-50/50 hover:bg-indigo-50 text-indigo-700 rounded-lg shadow-sm transition">
+                                <i class="fa-solid fa-wand-magic-sparkles text-indigo-500 text-sm mb-1 animate-pulse"></i>
+                                <span class="text-[9px] font-bold">Gemini AI 彩繪</span>
+                            </button>
                         </div>
                     </div>
 
@@ -407,7 +411,7 @@
                         <!-- 背景層 (僅在毛玻璃版面顯示，作滿版背景) -->
                         <img id="card-bg-full-photo" class="absolute inset-0 w-full h-full object-cover hidden z-0 brightness-[0.7]" src="" alt="" />
 
-                        <!-- 頂部資訊 (日期/Day N) (經典/毛玻璃) -->
+                        <!-- 頂部資訊 (日期/Day N) -->
                         <div id="card-header-area" class="flex justify-between items-start border-b border-white/20 pb-2 z-10">
                             <div>
                                 <span class="text-[9px] font-bold tracking-widest bg-white/20 px-2 py-0.5 rounded-full uppercase">2026 SUMMER</span>
@@ -415,28 +419,32 @@
                             </div>
                             <div class="text-right">
                                 <span id="card-preview-date" class="font-mono text-xs font-bold block">7/15 (三)</span>
-                                <span id="card-preview-daynum" class="text-[9px] opacity-80">Day 6</span>
+                                <span id="card-preview-daynum" class="text-[9px] font-bold opacity-75 uppercase tracking-wider block mt-0.5">Day 1</span>
                             </div>
                         </div>
 
-                        <!-- 經典版面：頂部插圖或照片 -->
-                        <div id="card-classic-image-container" class="w-full h-36 rounded-lg overflow-hidden relative shadow-inner my-2 border border-white/10 z-10">
+                        <!-- 經典版面：頂部插圖或照片 (環境投影防裁切版) -->
+                        <div id="card-classic-image-container" class="w-full h-36 rounded-lg overflow-hidden relative shadow-inner my-2 border border-white/10 z-10 bg-slate-950/20">
                             <!-- 預設漂亮的漸層背景 -->
                             <div id="card-classic-placeholder" class="absolute inset-0 bg-gradient-to-tr from-yellow-400 via-orange-500 to-red-600 flex flex-col items-center justify-center p-3 text-center">
                                 <i class="fa-solid fa-mountain-sun text-2xl text-white/90 mb-1"></i>
                                 <span class="text-[9px] tracking-wider text-white/80 uppercase">Wonderful Adventure</span>
                             </div>
-                            <!-- 上傳的真實相片 -->
-                            <img id="card-classic-uploaded-img" class="w-full h-full object-cover hidden" src="" alt="" />
+                            <!-- 智慧環境模糊背景層：防裁切填充 -->
+                            <img id="card-classic-uploaded-img-blur" class="absolute inset-0 w-full h-full object-cover blur-md opacity-50 scale-110 hidden pointer-events-none" src="" alt="" />
+                            <!-- 上傳的真實相片 (完整含入 object-contain) -->
+                            <img id="card-classic-uploaded-img" class="absolute inset-0 w-full h-full object-contain hidden z-10" src="" alt="" />
                         </div>
 
-                        <!-- 拍立得版面：相片框結構 -->
+                        <!-- 拍立得版面：相片框結構 (環境投影防裁切版) -->
                         <div id="card-polaroid-container" class="bg-white p-3 pb-8 shadow-md rounded-sm w-full hidden z-10 transform -rotate-1 mb-3">
-                            <div class="w-full h-40 bg-slate-100 overflow-hidden relative border border-slate-200">
+                            <div class="w-full h-40 bg-slate-900 overflow-hidden relative border border-slate-200">
                                 <div id="card-polaroid-placeholder" class="absolute inset-0 bg-gradient-to-tr from-teal-400 to-blue-500 flex items-center justify-center">
                                     <i class="fa-regular fa-image text-3xl text-white/80"></i>
                                 </div>
-                                <img id="card-polaroid-uploaded-img" class="w-full h-full object-cover hidden" src="" alt="" />
+                                <!-- 智慧環境模糊背景層：防裁切填充 -->
+                                <img id="card-polaroid-uploaded-img-blur" class="absolute inset-0 w-full h-full object-cover blur-sm opacity-40 scale-110 hidden pointer-events-none" src="" alt="" />
+                                <img id="card-polaroid-uploaded-img" class="absolute inset-0 w-full h-full object-contain hidden z-10" src="" alt="" />
                             </div>
                             <div class="text-center mt-2.5">
                                 <span id="card-polaroid-title" class="handwritten-font text-slate-800 font-bold text-lg"></span>
@@ -551,6 +559,7 @@
         <span>已複製專屬分享連結，快貼到 LINE 群組分享吧！</span>
     </div>
 
+    <!-- JavaScript Data and Core Logic -->
     <script>
         // ==================== 17天詳細行程資料庫 ====================
         const itineraryData = [
@@ -679,7 +688,7 @@
                 date: "7/21 (二)", dayTitle: "離島跳島冒險：佩尼達島一日遊", location: "沙努爾 ➔ 佩尼達島",
                 details: [
                     { time: "07:30-08:15", icon: "ship", text: "由沙努爾碼頭搭乘快艇，前往佩尼達島 (Nusa Penida) 離島西線。" },
-                    { time: "09:30", icon: "camera", text: "朝聖網美大熱門 Kelingking Beach (精靈海灘/恐龍灣)、Paluang Cliff。" },
+                    { time: "09:30", icon: "camera", text: "朝朝聖網美大熱門 Kelingking Beach (精靈海灘/恐龍灣)、Paluang Cliff。" },
                     { time: "12:00", icon: "utensils", text: "於島上享用簡易融合風味中餐。" },
                     { time: "13:30", icon: "camera", text: "探訪 Broken Beach (破碎沙灘)、Angel's Billabong (天使浴池) 與 Crystal Bay 水晶灣海灘。" },
                     { time: "16:30-17:15", icon: "ship", text: "搭乘返程快艇，返回沙努爾 Swastika 別墅酒店。" }
@@ -768,9 +777,9 @@
                 coords: [-8.028639, 110.638361],
                 openTime: "僅限上午 (09:30 前須抵達)",
                 ticket: "已含 (含便當、雨鞋、全套垂降保險)",
-                rating: "⭐️⭐️⭐️⭐️⭐️ (地心探險、上帝之光)",
+                rating: "⭐️⭐️⭐️⭐️⭐️ (上帝之光)",
                 intensity: "🔋🔋🔋🔋 (需要繩索垂降 60 米、踩泥濘)",
-                avoidTrap: "洞底極度泥濘滑溜，必須穿景區提供的高筒雨鞋。記得帶一雙多餘的乾淨襪子，與濕紙巾，以免弄髒衣物。",
+                avoidTrap: "洞底極度泥濘滑溜，必須穿景區提供的高筒雨鞋。記得帶一雙多餘的乾淨襪子，以免弄髒衣物。",
                 photoSpot: "中午 11:30 - 12:30 陽光直射進洞穴深處，照射在地下古老森林上，形成天堂般的光芒 (上帝之光)。",
                 desc: "一座因地表塌陷形成的垂直天坑。在幽暗的洞穴盡頭，陽光穿過頂部林蔭射入，呈現宛如電影神鬼奇航般的魔幻光柱。"
             },
@@ -782,9 +791,9 @@
                 ticket: "已含在火山套裝合約中",
                 rating: "⭐️⭐️⭐️⭐️⭐️ (一生必訪地標)",
                 intensity: "🔋🔋🔋🔋 (清晨低溫 5-10 度，火山灰粉塵大)",
-                avoidTrap: "風沙與火山灰極大，**務必攜帶防風口罩、護目鏡或墨鏡**。沙海騎馬可講價 (單程約 IDR 150K)，不要勉強攀爬250階梯。",
+                avoidTrap: "風沙與火山灰極大，務必攜帶防風口罩、護目鏡或墨鏡。沙海騎馬可講價 (單程約 IDR 150K)，不要勉強攀爬250階梯。",
                 photoSpot: "Penanjakan 觀景台。日出時分，薄霧中的布羅莫火山與旁邊的塞梅魯火山同時冒煙，宛如月球荒涼表面。",
-                desc: "東爪哇最知名的活火山。它巨大的沙海盆地、終年不散的白煙以及大地咆哮的低音，給予旅人極致震撼的美學視覺。"
+                desc: "東爪哇最知名的活火山。它巨大的沙海盆地、終年不散的白煙以及大地咆哮的低音，給予旅人極致震撼的視覺。"
             },
             {
                 name: "伊真藍火 Ijen Crater",
@@ -792,9 +801,9 @@
                 coords: [-8.058315, 114.241865],
                 openTime: "01:00 凌晨開始徒步",
                 ticket: "已含在火山套裝合約中",
-                rating: "⭐️⭐️⭐️⭐️⭐️ (全球僅兩處的天然藍火)",
+                rating: "⭐️⭐️⭐️⭐️⭐️ (全球唯二處的天然藍火)",
                 intensity: "🔋🔋⭐️🔋 (3公里陡坡、碎石路、夜間無照明)",
-                avoidTrap: "硫磺煙霧具有強烈刺激性，**必須全程配戴專業防毒面具 (嚮導會發放)**。銀質飾品接觸硫磺會變黑，請提早取下。",
+                avoidTrap: "硫磺煙霧具有強烈刺激性，必須全程配戴專業防毒面具 (嚮導會發放)。銀質飾品接觸硫磺會變黑，請提早取下。",
                 photoSpot: "凌晨時分在火山口深處，近距離拍攝暗夜中幽幽燃燒的淡藍色火焰；日出後拍攝 Tiffany 藍色酸性火山湖。",
                 desc: "以燃燒著液態硫磺形成的魔幻「藍色火焰」聞名於世。清晨這裡也是世界上最辛苦的「硫磺採礦人」工作的地方。"
             },
@@ -816,9 +825,9 @@
                 coords: [-8.829141, 115.084914],
                 openTime: "07:00 - 19:00",
                 ticket: "已含門票與 18:00 火舞表演票",
-                rating: "⭐️⭐️⭐️⭐️⭐️ (情人崖斷崖、傳統火舞)",
+                rating: "⭐️⭐️⭐️⭐️⭐️ (情人崖、傳統火舞)",
                 intensity: "🔋🔋 (需要沿著懸崖石梯步行，有野生猴子)",
-                avoidTrap: "這裡的野生猴子極度兇猛、有組織性！**千萬不要配戴墨鏡、帽子、大耳環或手拿手機與塑膠袋**，以免被猴子搶走！",
+                avoidTrap: "這裡的野生猴子極度兇猛、有組織性！千萬不要配戴墨鏡、帽子、大耳環或手拿手機與塑膠袋，以免被猴子搶走！",
                 photoSpot: "在傍晚 18:00 的露天劇場，以夕陽西下的印度洋斷崖為背景，捕捉「凱查火舞 (Kecak)」表演者熊熊烈火包圍的震撼瞬間。",
                 desc: "建於 11 世紀的古老寺廟，矗立在 70 米高的垂直懸崖頂端。崖下海浪洶湧，在此觀賞斷崖日落是峇里島最神聖的體驗。"
             },
@@ -830,7 +839,7 @@
                 ticket: "已含 Flower Dome + Cloud Forest 門票",
                 rating: "⭐️⭐️⭐️⭐️⭐️ (未來感超級花園)",
                 intensity: "🔋🔋 (溫室內步道平整好走，冷氣強)",
-                avoidTrap: "冷氣溫室「雲霧林」內溫度約為 18-22 度且會定時噴灑水霧，**長輩一定要攜帶薄外套防感冒**。地鐵坐到 Gardens by the Bay 站最快。",
+                avoidTrap: "冷氣溫室內溫度約為 18-22 度且會定時噴灑水霧，長輩一定要攜帶薄外套防感冒。地鐵坐到 Gardens by the Bay 站最快。",
                 photoSpot: "在雲霧林一進門處，仰角拍攝 35 米高的巨型室內人工瀑布山；19:45 躺在超級樹下的草地上拍攝震撼亮燈。",
                 desc: "新加坡耗巨資打造的地標，將大自然與頂尖科技完美融合。花穹重現了地中海氣候，雲霧林則模擬了熱帶高山濕冷環境。"
             }
@@ -908,6 +917,42 @@
             }
         ];
 
+        // ==================== 智能明信片預設模板結構 ====================
+        const staticPrompts = {
+            watercolor: "A minimalist modern travel postcard background illustration. Showing Borobudur stone Buddhist temple in Yogyakarta with dreamy misty morning sunrise glowing, soft ink and watercolor style, pastel orange and gold palette, plenty of negative space at the bottom for writing custom text, high-end travel diary aesthetic, scenic --ar 4:5",
+            retro: "A vintage travel poster illustration of Mount Bromo active volcano in Indonesia. Retro 1970s silkscreen print style, majestic smoking peaks against a bold red sun silhouette, minimalist warm earth tones, bold flat color blocks, fine textured grain, vintage typography negative space at bottom --ar 4:5",
+            anime: "A scenic aesthetic anime landscape illustration of Singapore Marina Bay Supertree Grove gardens at starry night. Magical futuristic trees glowing with neon blue and pink lights, dreamy Makoto Shinkai style sky, colorful watercolor gradients, romantic family travel vibes, beautiful and clean layout --ar 4:5"
+        };
+
+        const landmarkTemplates = {
+            borobudur: { eng: "ancient stone Borobudur Buddhist temple in Yogyakarta", detail: "majestic ancient stone stupas surrounded by quiet tropical mist" },
+            jomblang: { eng: "deep mysterious Jomblang Cave vertical sinkhole with heavenly vertical sunbeam", detail: "a magical light beam shining down into the dark underground rainforest, breathtaking atmosphere" },
+            bromo: { eng: "Mount Bromo active volcano caldera in East Java, Indonesia", detail: "a dramatic smoke plume rising from the active crater, deep volcanic ash sand sea below" },
+            ijen: { eng: "Ijen Crater volcano night hike with magical electric blue fire", detail: "vibrant glowing blue sulfur fire in the deep toxic dark volcanic valley, tiffany blue acid lake nearby" },
+            dolphins: { eng: "Lovina beach with pod of wild dolphins leaping in the tropical ocean at sunrise", detail: "sunrise silhouette, playful dolphins splashing in golden waves, distant mountains background" },
+            temple: { eng: "Pura Ulun Danu Bratan water temple floating on Bedugul lake in Bali", detail: "beautiful 11-tier multi-roofed shrine, serene smooth lake surface with reflection under gentle mist" },
+            kecak: { eng: "Uluwatu temple sunset cliff with Kecak fire dance outdoor performance", detail: "a circle of energetic performers surrounded by burning fire torches on a 70-meter high dramatic cliff overlooking the crashing Indian Ocean" },
+            supertree: { eng: "Singapore Gardens by the Bay Marina Bay Supertree Grove at night", detail: "futuristic tall metal trees glowing under cosmic stars, modern city skyline in far background" },
+            chinatown: { eng: "colorful Chinatown street in Singapore, decorated with red lanterns", detail: "traditional shophouses with wooden shutters, vibrant street food stalls, warm ambient evening lights" }
+        };
+
+        const styleTemplates = {
+            watercolor: { eng: "A minimalist modern travel postcard background illustration, delicate watercolor and ink sketch style", color: "soft pastel watercolors with warm golden light washes", ending: "perfect fine art details, elegant negative space for writing diary at bottom, travel book aesthetic, high resolution --ar 4:5" },
+            anime: { eng: "An aesthetic scenic anime landscape background illustration, in the style of Makoto Shinkai and Ghibli films", color: "vibrant color gradient, colorful magical skies", ending: "dreamy clouds, highly detailed and clean lines, cozy family travel animation vibe, clear layout space for text --ar 4:5" },
+            retro: { eng: "A retro travel poster illustration, vintage 1970s flat silkscreen print design", color: "warm retro color scheme with earth tones and terracotta, fine print grain texture", ending: "bold vector shapes, minimalist layout with empty space at bottom, nostalgic wanderlust aesthetic --ar 4:5" },
+            oil: { eng: "An impressionist romantic palette knife oil painting, thick impasto brushstrokes, textured paint details", color: "vivid rich artistic colors, atmospheric lighting", ending: "masterpiece, elegant artistic feel, romantic mood, beautiful blank area on canvas for lettering --ar 4:5" },
+            cyberpunk: { eng: "A cinematic futuristic sci-fi postcard art, cyberpunk style neon concept", color: "vibrant glowing neon purple, hot pink, and cobalt blue night lighting", ending: "cinematic fog, futuristic fantasy vibe, modern metropolitan travel diary feel, dark background elements with clean spacing --ar 4:5" },
+            minimalist: { eng: "A modern minimalist flat vector illustration, Nordic design aesthetic, clean papercut-like block shapes", color: "sophisticated muted colors, serene minimalist tone", ending: "perfect geometry, extremely clean negative space, stylish card design, elegant graphic vector art --ar 4:5" }
+        };
+
+        const vibeTemplates = {
+            dreamy: "dreamy soft atmosphere with gentle misty clouds, hazy and magical, calming low contrast --v 6.0",
+            epic: "epic majestic scale, dramatic cinematic direct lighting, breathtaking and awe-inspiring scenery, vivid high contrast --v 6.0",
+            warm: "warm nostalgic golden hour glow, cozy sun rays, family-friendly holiday feeling, comforting yellow and amber lights --v 6.0",
+            silent: "serene peaceful zen, quiet calm atmosphere, spiritually relaxing, harmonious soft shadows, minimalist balance --v 6.0",
+            romantic: "romantic starry sky, deep indigo night with purple and pink galaxy stardust, beautiful and emotional glow --v 6.0"
+        };
+
         // ==================== 頁面初次加載初始化 ====================
         let map;
         let markers = [];
@@ -976,7 +1021,250 @@
                 icon.classList.add('fa-chevron-up');
             });
         }
+    </script>
 
+    <script>
+        // ==================== 🤖 GEMINI API 整合模組 ====================
+        
+        // 17天家族旅行專屬 System Instruction 背景智庫
+        const SYSTEM_PROMPT = `
+        你是一位溫和、專業、體貼的 17 天家族旅行（印尼日惹、東爪哇雙火山、峇里島、新加坡）隨身 AI 祕書。你已經徹底記熟了這份行程與細則：
+        - 旅期：2026.07.10 - 2026.07.26。時差：日惹/泗水慢1小時，峇里島/新加坡與台灣無時差。
+        - 航班：TR873(7/9 23:30, TPE-SIN), TR248(7/10 SIN-YIA), TR243(7/23 DPS-SIN, 代號: R6ESPY), TR872(7/26 SIN-TPE)
+        - 包車：Javatrails Indonesia (聯絡人 Bintang, Whatsapp +6281390007303)
+        - 款項支付：7/10付4成 (IDR 21,400,000 或 USD 1,205)，7/15付3成尾款 (IDR 16,050,000 或 USD 905)
+        - 小費：半天 IDR 50,000，全天 IDR 100,000，極佳服務 150k~200k。必須給紙鈔，給硬幣極為失禮！
+        - 入境政策：印尼 eVOA 落地簽證 / AIAC 入境申報；新加坡 SGAC 入境卡 72 小時申報。
+        - 住宿地址：
+          * 7/10-7/14: Aveta Hotel Malioboro (日惹, Malioboro街 17:00-22:00封路, 聯絡搬行李 081-567920999)
+          * 7/14-7/15: Iki ika homestay (龐越/火山民宿)
+          * 7/15-7/16: Baratha Hotel & Resto (邦多沃索)
+          * 7/16-7/17: Rumi Bumi (羅威那/峇里島北部, 追海豚)
+          * 7/17-7/20: SARI MIMPI KUTUH villa (烏布)
+          * 7/20-7/22: Swastika Bungalows (沙努爾, 離島快艇起點)
+          * 7/22-7/23: The Kana Kuta Hotel (庫塔)
+          * 7/23-7/26: York Hotel (新加坡)
+
+        請用繁體中文回答，口吻親切有禮。遇到長輩、保暖、防沙防灰、路程或換匯時，務必給出具體且好用的叮嚀。
+        `;
+
+        // 通用 Gemini Text 呼叫函數 (具備指數級退避與 Google Search Grounding)
+        async function callGeminiText(userPrompt, systemInstruction = SYSTEM_PROMPT, useSearch = true) {
+            const apiKey = ""; // Canvas 在執行時會自動提供
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }]
+            };
+
+            if (useSearch) {
+                payload.tools = [{ "google_search": {} }];
+            }
+
+            if (systemInstruction) {
+                payload.systemInstruction = {
+                    parts: [{ text: systemInstruction }]
+                };
+            }
+
+            let delay = 1000;
+            const maxRetries = 3;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        const text = candidate.content.parts[0].text;
+                        let sources = [];
+                        const groundingMetadata = candidate.groundingMetadata;
+                        if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                            sources = groundingMetadata.groundingAttributions
+                                .map(attr => ({
+                                    uri: attr.web?.uri,
+                                    title: attr.web?.title,
+                                }))
+                                .filter(s => s.uri && s.title);
+                        }
+                        return { text, sources };
+                    }
+                    throw new Error("格式異常");
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        // Gemini Imagen 4.0 圖像生成 (用於 AI 彩繪明信片背景)
+        async function callGeminiImage(userPrompt) {
+            const apiKey = ""; // 執行時自動注入
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
+
+            const payload = {
+                instances: [{ prompt: userPrompt }],
+                parameters: { "sampleCount": 1 }
+            };
+
+            let delay = 1000;
+            const maxRetries = 3;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                    const result = await response.json();
+                    if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                        return `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                    }
+                    throw new Error("無效的影像資料");
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+    </script>
+
+    <script>
+        // ==================== 🔊 GEMINI TTS 語音朗讀處理器 ====================
+        
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcm16, sampleRate) {
+            const buffer = new ArrayBuffer(44 + pcm16.length * 2);
+            const view = new DataView(buffer);
+
+            const writeString = (v, offset, str) => {
+                for (let i = 0; i < str.length; i++) {
+                    v.setUint8(offset + i, str.charCodeAt(i));
+                }
+            };
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + pcm16.length * 2, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            writeString(view, 36, 'data');
+            view.setUint32(40, pcm16.length * 2, true);
+
+            for (let i = 0; i < pcm16.length; i++) {
+                view.setInt16(44 + i * 2, pcm16[i], true);
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+        async function callGeminiTTS(text, voiceName = "Leda") {
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: `你是一位貼心、溫暖的中文女語音導遊。請用溫和自然的繁體中文，生動地讀出以下內容。字數控制在150字內：${text}` }]
+                }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: voiceName }
+                        }
+                    }
+                }
+            };
+
+            let delay = 1000;
+            const maxRetries = 3;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                    const result = await response.json();
+                    const part = result?.candidates?.[0]?.content?.parts?.[0];
+                    const audioData = part?.inlineData?.data;
+                    const mimeType = part?.inlineData?.mimeType;
+
+                    if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                        const sampleRate = parseInt(mimeType.match(/rate=(\d+)/)?.[1] || "24000", 10);
+                        const pcmData = base64ToArrayBuffer(audioData);
+                        const pcm16 = new Int16Array(pcmData);
+                        const wavBlob = pcmToWav(pcm16, sampleRate);
+                        return URL.createObjectURL(wavBlob);
+                    }
+                    throw new Error("語音包格式不正確");
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        let currentAudio = null;
+        async function speakText(text, btnElement) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+            const origHtml = btnElement.innerHTML;
+            btnElement.innerHTML = '<i class="fa-solid fa-spinner animate-spin mr-1"></i>';
+            btnElement.disabled = true;
+
+            try {
+                // 去除 markdown 語法，利於 TTS 朗讀
+                const cleanedText = text.replace(/[*#`_\\-]/g, '').substring(0, 150);
+                const audioUrl = await callGeminiTTS(cleanedText);
+                currentAudio = new Audio(audioUrl);
+                currentAudio.onended = () => {
+                    btnElement.innerHTML = origHtml;
+                    btnElement.disabled = false;
+                };
+                currentAudio.play();
+            } catch (err) {
+                console.error(err);
+                btnElement.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>';
+                btnElement.disabled = false;
+                setTimeout(() => { btnElement.innerHTML = origHtml; }, 2000);
+            }
+        }
+    </script>
+
+    <script>
         // ==================== 渲染行程表 ====================
         function renderItinerary() {
             const itineraryContainer = document.getElementById('itinerary-container');
@@ -1001,12 +1289,23 @@
                             
                             <!-- 每日行程頂端加入 AI 攻略與卡片生成按鈕 -->
                             <div class="mb-4 flex flex-wrap gap-2 justify-end">
-                                <button onclick="askAIDayAdvice('${day.date}', '${day.dayTitle}', '${day.location}')" class="text-xs bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-medium px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1 transition transform hover:scale-102">
+                                <button onclick="askAIDayAdvice('${day.date}', '${day.dayTitle}', '${day.location}', ${index}, this)" class="text-xs bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-medium px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1 transition transform hover:scale-102">
                                     <i class="fa-solid fa-wand-magic-sparkles"></i> 🔍 詢問 AI 此日防坑與拍照攻略
                                 </button>
                                 <button onclick="openCardGenerator(${index})" class="text-xs bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-medium px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1 transition transform hover:scale-102">
                                     <i class="fa-solid fa-image"></i> 🎴 製作今日分享圖
                                 </button>
+                            </div>
+
+                            <!-- AI 每日即時攻略動態面板 -->
+                            <div id="ai-advice-panel-${index}" class="hidden mb-4 p-4 bg-gradient-to-r from-blue-50/70 to-indigo-50/70 border border-blue-100 rounded-xl text-xs relative shadow-inner">
+                                <div class="flex justify-between items-center mb-1 pb-1 border-b border-blue-200">
+                                    <span class="font-bold text-blue-800"><i class="fa-solid fa-robot mr-1"></i> Gemini 智能大秘書日誌</span>
+                                    <button onclick="speakText(document.getElementById('ai-advice-text-${index}').innerText, this)" class="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                                        <i class="fa-solid fa-volume-high"></i> 🔊 語音播報
+                                    </button>
+                                </div>
+                                <div id="ai-advice-text-${index}" class="text-slate-700 leading-relaxed whitespace-pre-wrap"></div>
                             </div>
 
                             <div class="relative border-l-2 border-blue-200 ml-3 pl-5 space-y-5 py-2">
@@ -1044,7 +1343,9 @@
                 itineraryContainer.innerHTML += html;
             });
         }
+    </script>
 
+    <script>
         // ==================== 🗺️ Leaflet 互動地圖模組 ====================
         function initLeafletMap() {
             // 初始化地圖，中心點放在峇里島
@@ -1124,7 +1425,9 @@
                 }
             }, 300);
         }
+    </script>
 
+    <script>
         // ==================== 🌟 渲染主要景點圖鑑 ====================
         function renderSights() {
             const sightsContainer = document.getElementById('sights-container');
@@ -1263,7 +1566,9 @@
                 renderPackingChecklist();
             });
         }
+    </script>
 
+    <script>
         // ==================== 🎴 旅行分享卡片生成與版面控制邏輯 ====================
         let selectedCardIndex = 0;
         const cardThemes = {
@@ -1302,7 +1607,9 @@
             document.getElementById('card-photo-input').value = '';
             document.getElementById('card-bg-full-photo').src = '';
             document.getElementById('card-classic-uploaded-img').src = '';
+            document.getElementById('card-classic-uploaded-img-blur').src = '';
             document.getElementById('card-polaroid-uploaded-img').src = '';
+            document.getElementById('card-polaroid-uploaded-img-blur').src = '';
             
             document.getElementById('card-preview-date').innerText = day.date;
             document.getElementById('card-preview-daynum').innerText = `Day ${dayIndex + 1}`;
@@ -1365,18 +1672,24 @@
 
         function updateCardImages() {
             const classicImg = document.getElementById('card-classic-uploaded-img');
+            const classicImgBlur = document.getElementById('card-classic-uploaded-img-blur');
             const classicPl = document.getElementById('card-classic-placeholder');
             const polaroidImg = document.getElementById('card-polaroid-uploaded-img');
+            const polaroidImgBlur = document.getElementById('card-polaroid-uploaded-img-blur');
             const polaroidPl = document.getElementById('card-polaroid-placeholder');
             const fullBgImg = document.getElementById('card-bg-full-photo');
 
             if (uploadedPhotoUrl) {
                 classicImg.src = uploadedPhotoUrl;
                 classicImg.classList.remove('hidden');
+                classicImgBlur.src = uploadedPhotoUrl;
+                classicImgBlur.classList.remove('hidden');
                 classicPl.classList.add('hidden');
 
                 polaroidImg.src = uploadedPhotoUrl;
                 polaroidImg.classList.remove('hidden');
+                polaroidImgBlur.src = uploadedPhotoUrl;
+                polaroidImgBlur.classList.remove('hidden');
                 polaroidPl.classList.add('hidden');
 
                 fullBgImg.src = uploadedPhotoUrl;
@@ -1385,9 +1698,11 @@
                 }
             } else {
                 classicImg.classList.add('hidden');
+                classicImgBlur.classList.add('hidden');
                 classicPl.classList.remove('hidden');
 
                 polaroidImg.classList.add('hidden');
+                polaroidImgBlur.classList.add('hidden');
                 polaroidPl.classList.remove('hidden');
 
                 fullBgImg.classList.add('hidden');
@@ -1612,8 +1927,108 @@
                 showCustomModal("分享提示", "您可以直接將此 HTML 網頁檔案傳送或 LINE 給家人，即可在手機上隨時離線互動、上傳相片並查看行程！", true, "好的");
             });
         }
+    </script>
 
-        // ==================== Gemini AI 功能模擬模組 ====================
+    <script>
+        // ==================== Gemini AI 功能實體化模組 ====================
+        
+        // AI 智能彩繪明信片背景生成
+        async function generateAIPosterImage(btnElement) {
+            // 解析目前選中的地標、風格與氛圍
+            const day = itineraryData[selectedCardIndex];
+            
+            // 嘗試推斷最貼近的地標
+            let landmarkKey = "bromo";
+            if (day.location.includes("日惹")) {
+                landmarkKey = day.dayTitle.includes("佛塔") || day.dayTitle.includes("婆羅浮屠") ? "borobudur" : "jomblang";
+            } else if (day.location.includes("伊真")) {
+                landmarkKey = "ijen";
+            } else if (day.location.includes("Lovina") || day.location.includes("羅威那")) {
+                landmarkKey = "dolphins";
+            } else if (day.location.includes("烏布") || day.location.includes("德哥拉朗")) {
+                landmarkKey = "temple";
+            } else if (day.location.includes("烏魯瓦圖") || day.location.includes("火舞")) {
+                landmarkKey = "kecak";
+            } else if (day.location.includes("新加坡")) {
+                landmarkKey = "supertree";
+            }
+
+            const landmark = landmarkTemplates[landmarkKey] || landmarkTemplates.bromo;
+            // 固定使用高質感的英式水彩插畫風
+            const style = styleTemplates.watercolor;
+            const vibe = vibeTemplates.dreamy;
+
+            const constructedPrompt = `${style.eng}, capturing the ${landmark.eng}. Featuring ${landmark.detail}, with ${style.color}. The overall vibe is ${vibe}, ${style.ending}`;
+
+            const origHtml = btnElement.innerHTML;
+            btnElement.innerHTML = '<i class="fa-solid fa-spinner animate-spin mr-1"></i> 彩繪中...';
+            btnElement.disabled = true;
+
+            const classicPl = document.getElementById('card-classic-placeholder');
+            const polaroidPl = document.getElementById('card-polaroid-placeholder');
+            const origClassicHtml = classicPl.innerHTML;
+            const origPolaroidHtml = polaroidPl.innerHTML;
+
+            const loadingShim = `
+                <div class="flex flex-col items-center justify-center space-y-2">
+                    <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                    <span class="text-[9px] tracking-widest text-indigo-300 font-bold uppercase animate-pulse">Gemini Painting...</span>
+                </div>
+            `;
+            classicPl.innerHTML = loadingShim;
+            polaroidPl.innerHTML = loadingShim;
+
+            try {
+                const imageUrl = await callGeminiImage(constructedPrompt);
+                uploadedPhotoUrl = imageUrl;
+                updateCardImages();
+                showCustomModal("AI 彩繪成功！🎨", "Gemini 已經在背景完美繪製出此地標的神采，已將其嵌入至明信片中，快來預覽吧！", true, "太棒了");
+            } catch (err) {
+                console.error(err);
+                showCustomModal("AI 彩繪失敗 😢", "由於目前連線人數較多，請稍後再試，或使用本機相片上傳！", true, "好的");
+            } finally {
+                btnElement.innerHTML = origHtml;
+                btnElement.disabled = false;
+                classicPl.innerHTML = origClassicHtml;
+                polaroidPl.innerHTML = origPolaroidHtml;
+                updateCardImages();
+            }
+        }
+
+        // AI 每日防坑與拍照攻略
+        async function askAIDayAdvice(date, title, location, index, btnElement) {
+            const panel = document.getElementById(`ai-advice-panel-${index}`);
+            const textContainer = document.getElementById(`ai-advice-text-${index}`);
+            
+            panel.classList.remove('hidden');
+            textContainer.innerHTML = `
+                <div class="flex items-center gap-2 py-2">
+                    <div class="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    <span class="text-blue-600 animate-pulse font-semibold">Gemini 大祕書正在結合 Search Grounding 為您撰寫實戰攻略...</span>
+                </div>
+            `;
+
+            const prompt = `請針對 ${date} 的 ${location} 行程「${title}」給出一份專屬於家族旅行（包含長輩、小孩）的3點實戰叮嚀。包含：1. 防踩雷/保暖/老人注意事項 2. 最推薦的拍照角度與網美站位 3. 當地推薦的私房美食或實用小知識。字數精煉在150字內。`;
+
+            try {
+                const response = await callGeminiText(prompt, SYSTEM_PROMPT, true);
+                let textHtml = response.text;
+                if (response.sources && response.sources.length > 0) {
+                    textHtml += `<div class="mt-2 pt-1 border-t border-blue-100 text-[10px] text-blue-500"><i class="fa-solid fa-link mr-1"></i>搜尋來源：${response.sources.map(s => `<a href="${s.uri}" target="_blank" class="underline mr-2">${s.title}</a>`).join('')}</div>`;
+                }
+                textContainer.innerHTML = textHtml;
+            } catch (err) {
+                console.error(err);
+                textContainer.innerText = "抱歉，秘書這下被山林訊號擋住了，請重新再點一次試試看！";
+            }
+        }
+
+        // AI 景點深度問答
+        function askAIAboutSight(sightName) {
+            askAICopilot(`我想了解關於世界知名景點「${sightName}」的深度遊玩、長輩耐受度、防坑提示、與最美的拍照機位細節。`);
+        }
+
+        // ==================== Chatbox 控制 ====================
         function toggleAICopilot() {
             const chatbox = document.getElementById('ai-chatbox');
             if (chatbox.classList.contains('hidden')) {
@@ -1636,7 +2051,6 @@
             if (chatbox.classList.contains('hidden')) {
                 toggleAICopilot();
             }
-            
             document.getElementById('chat-input').value = question;
             sendChatMessage();
         }
@@ -1647,7 +2061,7 @@
             }
         }
 
-        function sendChatMessage() {
+        async function sendChatMessage() {
             const input = document.getElementById('chat-input');
             const history = document.getElementById('chat-history');
             const q = input.value.trim();
@@ -1675,59 +2089,36 @@
             `;
             history.scrollTop = history.scrollHeight;
 
-            setTimeout(() => {
+            try {
+                const response = await callGeminiText(q, SYSTEM_PROMPT, true);
                 document.getElementById(loadingId).remove();
-                let reply = `您問的問題是：\"${q}\"。對此，建議參考行程表第 10 天與第 16 天的景點，並多攜帶 220V 印尼雙圓孔與英規三孔插座喔！`;
-
-                const lowerQ = q.toLowerCase();
-                if (lowerQ.includes('穿著') || lowerQ.includes('衣物') || lowerQ.includes('火山')) {
-                    reply = `🌋 **雙火山挑戰穿著與長輩提醒：**<br>
-                    • **清晨氣溫**：布羅莫 (7/15) 與伊真 (7/16) 的深夜氣溫可能只有 **5 至 10 度**！<br>
-                    • **服裝搭配**：建議採取洋蔥式穿法。必帶：防風保暖厚外套、長褲、毛帽，以及遮陽墨鏡與口罩 (火山灰與硫磺風砂大)。<br>
-                    • **長輩叮嚀**：火山底有沙海，走動耗體力，長輩在布羅莫建議可以**騎馬越沙海** (單程約 IDR 150K)，伊真火山則多碎石下坡，可安排專業挑夫人力車拉行。`;
-                } else if (lowerQ.includes('新加坡') || lowerQ.includes('入境') || lowerQ.includes('15') || lowerQ.includes('7/23') || lowerQ.includes('sgac')) {
-                    reply = `🇸🇬 **新加坡 7/23 (四) 入境與酷航資訊：**<br>
-                    • **航班資訊**：7/23 17:35 由峇里島飛往新加坡 (酷航 TR243，代號 \`R6ESPY\`)。<br>
-                    • **重要手續**：台灣觀光持 6 個月護照免簽。但**出發前 72 小時內，必須在「新加坡電子入境卡 (SGAC)」官方網站或 MyICA APP 免費填寫填妥並保存確認信**。<br>
-                    • **飯店安排**：York Hotel 前台可使用中文溝通，退房時間為 11:00，出行至烏節路非常方便。`;
-                } else if (lowerQ.includes('小費') || lowerQ.includes('錢') || lowerQ.includes('印尼盾')) {
-                    reply = `🇮🇩 **峇里島與印尼包車小費標準：**<br>
-                    • **全天包車 (8-12小時)**：全體人員總共湊出 **IDR 100,000 (約合台幣 177 元)** 當面拿給司機即可。<br>
-                    • **半日行程 (4-6小時)**：建議給 IDR 50,000。<br>
-                    • **注意**：小費務必給「紙鈔」，不可給硬幣 (硬幣在印尼有施捨感，很不禮貌)。超滿意服務可酌情增至 IDR 150K ~ 200K。`;
-                } else if (lowerQ.includes('電壓') || lowerQ.includes('插座') || lowerQ.includes('轉接頭')) {
-                    reply = `🔌 **印尼與新加坡電壓/插頭規格：**<br>
-                    • **印尼地區**：電壓 220V，插座是 **雙孔圓形 (歐規/德規)**。<br>
-                    • **新加坡地區**：電壓 230V，插座是 **三孔方型 (英規)**。<br>
-                    • **溫馨提醒**：行李清單已幫您加入了轉接頭與延長線，記得隨身攜帶。`;
-                } else if (lowerQ.includes('封路') || lowerQ.includes('7/10') || lowerQ.includes('aveta')) {
-                    reply = `🏨 **7/10 日惹 Aveta 飯店入住封路注意：**<br>
-                    • **封路時間**：Malioboro 路段每日 17:00 至 22:00（印尼時間）封閉禁止車輛進入。<br>
-                    • **應對方案**：包車司機可改走 Jl. Mataram 作為替代路線。抵達後，請直接聯絡飯店前台：\`081-567920999\`，飯店工作人員會立刻到巷口幫全家人搬運行李！`;
-                } else if (lowerQ.includes('魚尾獅') || lowerQ.includes('7/24') || lowerQ.includes('新加坡一日遊')) {
-                    reply = `🇸🇬 **7/24 (五) 新加坡精華一日遊 AI 獨家路線：**<br>
-                    • **09:00 魚尾獅**：搭乘公車至 \"Fullerton Square (03011)\" 下車，步行即達，省去地鐵站走過來的遙遠路程！<br>
-                    • **11:30 新達城午餐**：參觀財富之泉。下午 14:00 後，可搭乘全新地鐵支線直達「濱海灣花園站」。<br>
-                    • **19:45 超級樹燈光秀**：請務必在 19:15 提前去超級樹下的草坪「佔位」，躺著仰望，燈光灑下來美得像阿凡達世界！`;
-                }
-
+                
+                const responseId = 'ai-response-' + Date.now();
+                let replyHtml = `
+                    <div class="flex flex-col gap-1.5 bg-white p-3 rounded-2xl shadow-sm border text-slate-700 max-w-[85%]">
+                        <p id="${responseId}">${response.text}</p>
+                        <div class="flex items-center justify-between mt-1 pt-1 border-t border-slate-100 text-[10px] text-blue-600">
+                            <button onclick="speakText(document.getElementById('${responseId}').innerText, this)" class="flex items-center gap-1 font-semibold hover:text-blue-800">
+                                <i class="fa-solid fa-volume-high"></i> 🔊 語音朗讀
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                history.innerHTML += replyHtml;
+                history.scrollTop = history.scrollHeight;
+            } catch (err) {
+                console.error(err);
+                document.getElementById(loadingId).remove();
                 history.innerHTML += `
                     <div class="flex">
-                        <div class="bg-white p-2.5 rounded-2xl shadow-sm border text-slate-700 max-w-[85%] leading-relaxed">
-                            ${reply}
+                        <div class="bg-rose-50 text-rose-700 p-2.5 rounded-2xl border border-rose-100 max-w-[85%] text-xs">
+                            抱歉，秘書的手機訊號好像斷了，請再試一次看看！
                         </div>
                     </div>
                 `;
                 history.scrollTop = history.scrollHeight;
-            }, 1000);
-        }
-
-        function askAIDayAdvice(date, title, location) {
-            askAICopilot(`我想詢問關於 ${date} 在 ${location} 的 \"${title}\" 這天行程，有什麼需要特別注意的長輩防踩雷、防坑指南或是最美拍照角度？`);
-        }
-
-        function askAIAboutSight(sightName) {
-            askAICopilot(`我想了解關於 \"${sightName}\" 景點的深度遊玩拍照指南與防坑注意事項。`);
+            }
         }
 
         // ==================== 💅 自定義高質感 Modal 控制 ====================
