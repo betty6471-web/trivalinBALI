@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>印尼 x 新加坡 17日家族旅遊指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Leaflet.js 開源地圖庫 CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f3f4f6; }
+        .tab-active { border-bottom-width: 4px; border-color: #3b82f6; color: #3b82f6; font-weight: 600; }
+        .accordion-content { transition: max-height 0.3s ease-out, padding 0.3s ease; }
+        /* 自定義滾動條 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+        .checkbox-custom:checked + label { text-decoration: line-through; color: #9ca3af; }
+        .pink-item { color: #db2777; font-weight: 500; } /* 粉紅色字體 */
+        
+        /* 載入動畫效果 */
+        .typing-indicator span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased relative pb-20">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-teal-500 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-3xl mx-auto px-4 py-5">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h1 class="text-2xl font-bold tracking-wide">🌴 印尼 x 新加坡 17日遊</h1>
+                    <p class="text-sm opacity-90 mt-1"><i class="fa-regular fa-calendar-days mr-1"></i> 2026.7.10 (五) - 2026.7.26 (日)</p>
+                </div>
+                <!-- 頂部 AI 快速呼叫按鈕 -->
+                <button onclick="toggleAICopilot()" class="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm transition">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+                    </span>
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 隨行 AI 秘書
+                </button>
+            </div>
+            <div class="flex gap-4 mt-3 text-[11px] font-medium bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                <span><i class="fa-solid fa-clock"></i> 日惹/泗水: -1hr</span>
+                <span><i class="fa-solid fa-clock"></i> 峇里島/新加坡: 無時差</span>
+                <span><i class="fa-solid fa-wallet"></i> 換匯：USD 3000 / SGD 200</span>
+            </div>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <div class="flex justify-between px-1 max-w-3xl mx-auto bg-white/10 text-xs sm:text-xs md:text-sm">
+            <button onclick="switchTab('itinerary')" id="tab-itinerary" class="tab-btn flex-1 py-3 text-center text-white font-medium border-b-4 border-white">每日行程</button>
+            <button onclick="switchTab('map')" id="tab-map" class="tab-btn flex-1 py-3 text-center text-white/70 font-medium border-b-4 border-transparent hover:text-white">🗺️ 互動地圖</button>
+            <button onclick="switchTab('attractions')" id="tab-attractions" class="tab-btn flex-1 py-3 text-center text-white/70 font-medium border-b-4 border-transparent hover:text-white">🌟 景點介紹</button>
+            <button onclick="switchTab('accommodation')" id="tab-accommodation" class="tab-btn flex-1 py-3 text-center text-white/70 font-medium border-b-4 border-transparent hover:text-white">住宿與預算</button>
+            <button onclick="switchTab('packing')" id="tab-packing" class="tab-btn flex-1 py-3 text-center text-white/70 font-medium border-b-4 border-transparent hover:text-white">行前與打包</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-3xl mx-auto p-4">
+        
+        <!-- Tab 1: Itinerary -->
+        <div id="content-itinerary" class="tab-content block">
+            
+            <!-- 實用速查指南卡片 -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4 text-xs text-amber-900 space-y-2 shadow-sm">
+                <div class="font-bold text-sm text-amber-800 flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-exclamation text-amber-600"></i> 行前與通訊速查手冊
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <p class="font-bold">📱 撥打電話指南：</p>
+                        <p class="text-gray-600">印尼撥回台灣市話：<span class="font-mono bg-white px-1 py-0.5 border rounded">001+886+區碼(去0)+市話</span></p>
+                        <p class="text-gray-600">印尼撥回台灣手機：<span class="font-mono bg-white px-1 py-0.5 border rounded">001+886+手機(去0)</span></p>
+                    </div>
+                    <div>
+                        <p class="font-bold">💵 峇里島小費標準（給紙鈔，硬幣失禮）：</p>
+                        <p class="text-gray-600">• 半天(4-6H)：IDR 50,000</p>
+                        <p class="text-gray-600">• 全天(8-12H)：IDR 100,000 <span class="text-[10px] text-gray-500">(約台幣177元，可按天付)</span></p>
+                        <p class="text-gray-600">• 超讚服務：IDR 150,000 ~ 200,000</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">詳細行程表</h2>
+                <button onclick="expandAll()" class="text-sm text-blue-600 hover:text-blue-800 font-medium"><i class="fa-solid fa-up-right-and-down-left-from-center mr-1"></i>全部展開</button>
+            </div>
+            
+            <div id="itinerary-container" class="space-y-3">
+                <!-- JavaScript 將在這裡生成行程 -->
+            </div>
+        </div>
+
+        <!-- Tab 2: Interactive Map -->
+        <div id="content-map" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+                <h2 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-map-location-dot text-blue-500"></i> 行程互動實時地圖
+                </h2>
+                <p class="text-xs text-gray-500 mb-3">支持分區域與分類切換。點擊地點，地圖會自動對焦並打開 Google Maps 導航連結！</p>
+                
+                <!-- 篩選器按鈕組 -->
+                <div class="space-y-2 mb-4">
+                    <div class="flex flex-wrap gap-1.5" id="region-filters">
+                        <button onclick="filterMapRegion('all')" class="map-reg-btn text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-600 text-white transition">顯示全部</button>
+                        <button onclick="filterMapRegion('jogja')" class="map-reg-btn text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🇮🇩 日惹</button>
+                        <button onclick="filterMapRegion('volcano')" class="map-reg-btn text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🌋 雙火山</button>
+                        <button onclick="filterMapRegion('bali')" class="map-reg-btn text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🏝️ 峇里島</button>
+                        <button onclick="filterMapRegion('sg')" class="map-reg-btn text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🇸🇬 新加坡</button>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5" id="category-filters">
+                        <span class="text-xs text-gray-400 self-center mr-1">類型：</span>
+                        <button onclick="filterMapCategory('all')" class="map-cat-btn text-[11px] px-2.5 py-1 rounded-md bg-teal-500 text-white transition">全部</button>
+                        <button onclick="filterMapCategory('attraction')" class="map-cat-btn text-[11px] px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 hover:bg-gray-200 transition">📍 景點</button>
+                        <button onclick="filterMapCategory('food')" class="map-cat-btn text-[11px] px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🍽️ 餐廳</button>
+                        <button onclick="filterMapCategory('hotel')" class="map-cat-btn text-[11px] px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🏨 住宿</button>
+                    </div>
+                </div>
+
+                <!-- 地圖本體 Container -->
+                <div id="map" class="w-full h-[380px] sm:h-[450px] rounded-xl overflow-hidden shadow-inner border border-gray-200 z-10"></div>
+            </div>
+
+            <!-- 地圖篩選後的清單列表 -->
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+                <h3 class="text-sm font-bold text-gray-700 mb-3"><i class="fa-solid fa-list-ul mr-1.5"></i> 當前區域地點清單</h3>
+                <div id="map-places-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[220px] overflow-y-auto pr-1">
+                    <!-- 地點卡片將動態生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Attractions Introduction -->
+        <div id="content-attractions" class="tab-content hidden space-y-4">
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
+                <h2 class="text-xl font-bold text-gray-800 mb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-star text-amber-500"></i> 主要經典景點圖文指南
+                </h2>
+                <p class="text-xs text-gray-500 mb-4">精選本行程各大重量級景點。包含實用防坑小提示、門票資訊、必看亮點以及體能考驗評分。</p>
+                
+                <!-- 景點篩選器 -->
+                <div class="flex flex-wrap gap-1.5 mb-5 border-b pb-4">
+                    <button onclick="filterAttractionRegion('all')" class="attr-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition shadow-sm">顯示全部</button>
+                    <button onclick="filterAttractionRegion('jogja')" class="attr-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🇮🇩 日惹歷史</button>
+                    <button onclick="filterAttractionRegion('volcano')" class="attr-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🌋 壯麗火山</button>
+                    <button onclick="filterAttractionRegion('bali')" class="attr-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🏝️ 峇里海島</button>
+                    <button onclick="filterAttractionRegion('sg')" class="attr-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition">🇸🇬 科技獅城</button>
+                </div>
+
+                <!-- 景點卡片展示區 -->
+                <div id="attractions-gallery" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- JS 動態生成景點卡片 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Accommodation & Budget -->
+        <div id="content-accommodation" class="tab-content hidden space-y-6">
+            
+            <!-- 住宿清單 -->
+            <div>
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-hotel text-emerald-600"></i> 飯店住宿與官方地址
+                </h2>
+                <div id="hotel-container" class="space-y-4">
+                    <!-- JavaScript 將在這裡生成住宿 -->
+                </div>
+            </div>
+
+            <!-- 預算花費一覽表 -->
+            <div class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
+                <h2 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-wallet text-indigo-600"></i> 行程花費預算一覽表
+                </h2>
+                <p class="text-xs text-gray-500 mb-4">記錄已支付與未付的所有大筆開銷，方便與家人對帳與清點資金準備。</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                <th class="p-2.5">費用項目</th>
+                                <th class="p-2.5 text-right">金額 (TWD / IDR)</th>
+                                <th class="p-2.5">付款備註 & 交易卡片</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-600">
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">四段機票</td>
+                                <td class="p-2.5 text-right font-mono text-indigo-600">NT$ 58,862</td>
+                                <td class="p-2.5 text-gray-500">3/14 已付 (慈玉山卡)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 bg-indigo-50/20">
+                                <td class="p-2.5 font-bold">印尼包車旅行社 (總費用)</td>
+                                <td class="p-2.5 text-right font-mono text-indigo-700">IDR 53,500,000</td>
+                                <td class="p-2.5 text-gray-500 font-medium">Bintang 總報價 (約台幣 95,127 元)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 pl-6">• 旅行社訂金 (3成)</td>
+                                <td class="p-2.5 text-right font-mono text-emerald-600">NT$ 29,765</td>
+                                <td class="p-2.5 text-gray-500">5/25 已付 (Fubon卡，含4%手續費共 IDR 16,692,000)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 bg-amber-50/30">
+                                <td class="p-2.5 pl-6 font-bold text-amber-800">• 7/10 現場餘款 (4成)</td>
+                                <td class="p-2.5 text-right font-mono text-amber-700">IDR 21,400,000</td>
+                                <td class="p-2.5 text-amber-900 font-bold">⚠️ 現場以印尼盾支付 (折合約 USD 1205)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 bg-amber-50/30">
+                                <td class="p-2.5 pl-6 font-bold text-amber-800">• 7/15 現場餘款 (3成)</td>
+                                <td class="p-2.5 text-right font-mono text-amber-700">IDR 16,050,000</td>
+                                <td class="p-2.5 text-amber-900 font-bold">⚠️ 現場以印尼盾支付 (折合約 USD 905)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">7/10-7/13 住宿 (日惹)</td>
+                                <td class="p-2.5 text-right font-mono">NT$ 12,131</td>
+                                <td class="p-2.5 text-gray-500">7/6 已刷富邦卡支付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 bg-rose-50/30">
+                                <td class="p-2.5 font-bold text-rose-700">7/14 住宿 (龐越)</td>
+                                <td class="p-2.5 text-right font-mono text-rose-600">NT$ 1,009</td>
+                                <td class="p-2.5 text-rose-900 font-bold">🚨 7/11 富邦卡未付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 bg-rose-50/30">
+                                <td class="p-2.5 font-bold text-rose-700">7/15 住宿 (邦多沃索)</td>
+                                <td class="p-2.5 text-right font-mono text-rose-600">NT$ 862</td>
+                                <td class="p-2.5 text-rose-900 font-bold">🚨 7/12 富邦卡未付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 bg-rose-50/30">
+                                <td class="p-2.5 font-bold text-rose-700">7/16 住宿 (羅威那)</td>
+                                <td class="p-2.5 text-right font-mono text-rose-600">NT$ 2,080</td>
+                                <td class="p-2.5 text-rose-900 font-bold">🚨 7/12 富邦卡未付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">7/17-7/19 住宿 (烏布)</td>
+                                <td class="p-2.5 text-right font-mono">NT$ 15,959</td>
+                                <td class="p-2.5 text-gray-500">7/1 已刷富邦卡支付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50 bg-rose-50/30">
+                                <td class="p-2.5 font-bold text-rose-700">7/20-7/21 住宿 (沙努爾)</td>
+                                <td class="p-2.5 text-right font-mono text-rose-600">NT$ 8,893</td>
+                                <td class="p-2.5 text-rose-900 font-bold">🚨 7/11 富邦卡未付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">7/22 住宿 (庫塔)</td>
+                                <td class="p-2.5 text-right font-mono">NT$ 1,991</td>
+                                <td class="p-2.5 text-gray-500">5/25 已刷玉山卡支付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">7/23-7/25 住宿 (新加坡)</td>
+                                <td class="p-2.5 text-right font-mono">NT$ 23,539</td>
+                                <td class="p-2.5 text-gray-500">4/6 已刷慈玉山卡支付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">DJB 網卡 (慈、川)</td>
+                                <td class="p-2.5 text-right font-mono">NT$ 2,344</td>
+                                <td class="p-2.5 text-gray-500">6/18 已刷富邦卡支付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">威訊網卡 (妞、昭)</td>
+                                <td class="p-2.5 text-right font-mono">NT$ 1,166</td>
+                                <td class="p-2.5 text-gray-500">6/18 已刷永豐卡支付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">印尼電子簽證費 (eVOA)</td>
+                                <td class="p-2.5 text-right font-mono">NT$ 3,708</td>
+                                <td class="p-2.5 text-gray-500">7/1 已刷富邦卡支付 (4人費用)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">峇里島觀光稅</td>
+                                <td class="p-2.5 text-right font-mono">NT$ 1,100</td>
+                                <td class="p-2.5 text-gray-500">7/3 已刷富邦卡支付</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="p-2.5 font-bold">富邦旅遊保險</td>
+                                <td class="p-2.5 text-right font-mono">NT$ 5,568</td>
+                                <td class="p-2.5 text-gray-500">7/4 已刷富邦卡支付</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 5: Packing & Prep -->
+        <div id="content-packing" class="tab-content hidden space-y-6">
+            
+            <!-- 重要簽證與通訊 -->
+            <section class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
+                <h3 class="font-bold text-lg text-blue-700 mb-3"><i class="fa-solid fa-passport mr-2"></i>印尼與新加坡行前重要清單</h3>
+                <ul class="space-y-3 text-sm text-gray-700">
+                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i> <div><b>印尼電子落地簽 (eVOA)：</b>建議出發前線上申請，費用 IDR 500,000 / 人。需要大頭照及身分證電子檔。</div></li>
+                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i> <div><b>印尼入境卡 (AIAC)：</b>抵達前 3 天內至官方平台免費填寫，截圖 QR Code。</div></li>
+                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i> <div><b>峇里島觀光稅：</b>進入峇里島前，需在 Love Bali 網站線上繳納並取得證明 (約 IDR 150,000)。</div></li>
+                    <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i> <div><b>新加坡電子入境卡 (SGAC)：</b>抵達新加坡前 72 小時內透過 MyICA APP 免費填寫。台灣人觀光免簽可停30天。</div></li>
+                </ul>
+            </section>
+
+            <!-- AI 智慧打包清單生成 -->
+            <section class="bg-gradient-to-r from-pink-50 to-blue-50 rounded-xl shadow-sm p-5 border border-pink-100">
+                <h3 class="font-bold text-lg text-pink-800 mb-2"><i class="fa-solid fa-robot mr-2"></i>AI 智慧打包行李管家</h3>
+                <p class="text-xs text-gray-600 mb-4">輸入您的特殊同行旅伴或需求（如：帶長輩、愛好空拍、需要浮潛），AI 將為您即時推薦專屬行李打包追加清單！</p>
+                <div class="flex gap-2">
+                    <input type="text" id="ai-pack-input" placeholder="例如：我有帶70歲長輩、我是空拍機愛好者" class="flex-1 px-4 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+                    <button onclick="generateAIPackingList()" class="bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition shrink-0">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>生成
+                    </button>
+                </div>
+                
+                <!-- AI 生成行李結果區域 -->
+                <div id="ai-pack-result" class="mt-4 hidden bg-white p-4 rounded-lg border border-pink-100 shadow-inner">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-pink-600"><i class="fa-solid fa-sparkles mr-1"></i>AI 推薦追加項目</span>
+                        <button onclick="addAIPackToChecklist()" class="text-xs bg-teal-500 hover:bg-teal-600 text-white font-medium px-2 py-1 rounded transition">
+                            <i class="fa-solid fa-plus mr-1"></i>一鍵加入主清單
+                        </button>
+                    </div>
+                    <ul id="ai-pack-list" class="space-y-1.5 text-xs text-gray-700 list-disc list-inside">
+                        <!-- AI行李結果 -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 互動式打包清單 -->
+            <section class="bg-white rounded-xl shadow-sm p-5 border border-gray-100">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-lg text-teal-600"><i class="fa-solid fa-suitcase mr-2"></i>打包清單 Checklist</h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-pink-600 font-bold bg-pink-50 px-2 py-1 rounded border border-pink-200">🌸 代表出國必備自備品</span>
+                        <button onclick="showResetConfirmModal()" class="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 hover:bg-gray-200"><i class="fa-solid fa-rotate-right mr-1"></i>重置</button>
+                    </div>
+                </div>
+                <div id="packing-container" class="space-y-4">
+                    <!-- JavaScript 將在這裡生成清單 -->
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- AI Travel Copilot Drawer (聊天側邊欄) -->
+    <div id="ai-copilot-drawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col border-l border-gray-200">
+        <!-- Drawer Header -->
+        <div class="p-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-white/20 p-1.5 rounded-lg">
+                    <i class="fa-solid fa-robot text-lg animate-bounce"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">AI 隨行旅遊助理</h3>
+                    <p class="text-[10px] opacity-90">已完整儲存 17 日行程、景點與預算狀態</p>
+                </div>
+            </div>
+            <button onclick="toggleAICopilot()" class="text-white hover:text-gray-200 p-1">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Chat History -->
+        <div id="chat-history" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50">
+            <!-- 歡迎訊息 -->
+            <div class="flex gap-2.5 items-start">
+                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs shrink-0 font-bold">AI</div>
+                <div class="bg-white p-3 rounded-lg rounded-tl-none shadow-sm text-sm border border-gray-100 max-w-[85%]">
+                    <p class="font-medium text-gray-800 mb-1">您好！我是您的 17 天印尼星國隨行秘書。👋</p>
+                    <p class="text-xs text-gray-600 leading-relaxed">我已經閱讀了您最新的行程計畫，包含飯店詳細地址、全新景點庫與對帳清單。您可以問我任何問題，如印尼換匯技巧、兩座火山防寒準備、新加坡米其林美食推薦、或甚至是幫您與家人拆帳計算！</p>
+                    <!-- 快速推荐問題 -->
+                    <div class="mt-3 space-y-1.5">
+                        <button onclick="sendQuickPrompt('這次去布羅莫和伊真火山兩大火山，行李衣服與防寒要怎麼準備？')" class="w-full text-left bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs py-1.5 px-2.5 rounded-md border border-blue-100 block transition">🌋 火山穿著與禦寒建議</button>
+                        <button onclick="sendQuickPrompt('請詳細列出 7/24 與 7/25 新加坡行程中的高評價特色餐廳與交通攻略。')" class="w-full text-left bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs py-1.5 px-2.5 rounded-md border border-teal-100 block transition">🇸🇬 新加坡必吃美食與交通</button>
+                        <button onclick="sendQuickPrompt('印尼旅行社的報價與現場要支付的 4成(7/10) 和 3成(7/15) 餘款該怎麼用美金或印尼盾支付比較划算？')" class="w-full text-left bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs py-1.5 px-2.5 rounded-md border border-purple-100 block transition">💵 印尼旅行社餘款支付指南</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Input Area -->
+        <div class="p-3 border-t border-gray-200 bg-white">
+            <div class="flex gap-2">
+                <input type="text" id="chat-input" placeholder="詢問行程、景點拍照位、換匯、防坑..." class="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" onkeydown="if(event.key === 'Enter') sendMessage()">
+                <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-lg transition flex items-center justify-center">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modern Confirm / Alert Modals -->
+    <div id="custom-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="bg-white rounded-xl max-w-sm w-full p-5 shadow-2xl transform scale-95 transition-transform duration-200">
+            <div class="flex items-center gap-3 text-amber-500 mb-3" id="modal-icon-container">
+                <i class="fa-solid fa-circle-question text-2xl"></i>
+                <h3 class="font-bold text-lg text-gray-800" id="modal-title">確認操作</h3>
+            </div>
+            <p class="text-sm text-gray-600 mb-4" id="modal-message">您確定要執行此操作嗎？</p>
+            <div class="flex justify-end gap-2 text-sm font-medium">
+                <button id="modal-btn-cancel" onclick="closeCustomModal()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition">取消</button>
+                <button id="modal-btn-confirm" class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white transition">確認</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Buttons (Fixed Bottom) -->
+    <div class="fixed bottom-4 right-4 z-30 flex flex-col gap-3">
+        <!-- AI Floating Button -->
+        <button onclick="toggleAICopilot()" class="bg-gradient-to-r from-blue-600 to-teal-500 text-white p-4 rounded-full shadow-lg hover:from-blue-700 hover:to-teal-600 transition transform hover:scale-105 relative">
+            <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-teal-500 border border-white"></span>
+            </span>
+            <i class="fa-solid fa-robot text-xl"></i>
+        </button>
+        <!-- Share Button -->
+        <button onclick="shareTrip()" class="bg-white text-gray-700 p-4 rounded-full shadow-lg hover:bg-gray-50 transition border border-gray-200 transform hover:scale-105">
+            <i class="fa-solid fa-share-nodes text-xl"></i>
+        </button>
+    </div>
+    
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg opacity-0 transition-opacity pointer-events-none shadow-lg z-50">
+        已複製網址，可以貼上分享給家人！
+    </div>
+
+    <!-- 腳本 -->
+    <script>
+        const itineraryData = [
+            {
+                date: "7/9 (四)", dayTitle: "出發日：前往樟宜機場", location: "台北 ✈️ 新加坡",
+                details: [
+                    { time: "22:30", icon: "car", text: "預約 UBER 接送前往桃園機場第一航廈。確保手機 ESIM 先行設定完成。" },
+                    { time: "23:30", icon: "passport", text: "辦理登機 (酷航在第1航廈 5-7排)。確認SIM卡、富邦旅遊保險、隨身攜帶行動電源。" },
+                    { time: "01:35", icon: "plane", text: "搭乘酷航 TR873 飛往新加坡樟宜機場 (預計 06:00 抵達)。訂位代號: NCD86D。預先託運 20kg 行李 (買2件)。" }
+                ]
+            },
+            {
+                date: "7/10 (五)", dayTitle: "初抵爪哇：普蘭巴南與神廟日落", location: "日惹",
+                details: [
+                    { time: "08:05", icon: "plane", text: "轉機搭乘 TR248 前往日惹 YIA 機場 (09:35抵達)。此段航程沒有預選座位。" },
+                    { time: "10:30", icon: "car", text: "機場包車接送。前往市區 INTRAVALAS 換匯 (用美金現鈔)。" },
+                    { time: "11:30", icon: "wallet", text: "支付印尼旅行社餘款 4成 (IDR 21,400,000 / 折合約 USD 1205) 用印尼盾現金支付。" },
+                    { time: "12:00", icon: "utensils", text: "中餐推薦：AYOM Jogja (環境優美的印尼融合料理)。" },
+                    { time: "14:00", icon: "camera", text: "普蘭巴南神廟 (Candi Prambanan) - 安排專屬英文導遊 (約2小時)。" },
+                    { time: "16:30", icon: "camera", text: "參觀皮圖拉波科宮殿 (Ratu Boko) 門票已含，或前往 Hutan Pinus Pengger 松樹林 (2小時) 或 Obelix Hills 景觀餐廳看夕陽。" },
+                    { time: "18:30", icon: "utensils", text: "晚餐推薦：Abhayagiri Restaurant (景觀極佳) 或 The House of Raminten (道地復古風)。" },
+                    { time: "20:30", icon: "bed", text: "入住 Aveta Hotel (Jl. Malioboro No. 42)。注意: Malioboro 路段每日 17:00-22:00 封路，需走 Jl. Mataram 替代道路，撥打 081-567920999 聯絡工作人員協助搬行李。" }
+                ]
+            },
+            {
+                date: "7/11 (六)", dayTitle: "世界遺產：婆羅浮屠朝聖", location: "日惹",
+                details: [
+                    { time: "08:00", icon: "car", text: "包車出發前往婆羅浮屠 (世界最大佛寺)。" },
+                    { time: "09:00", icon: "camera", text: "婆羅浮屠登頂參觀 - 專屬中文/華語官方導遊解說 (包含登頂佛塔建築主體門票)。" },
+                    { time: "12:30", icon: "utensils", text: "中餐推薦：BS Resto (婆羅浮屠周邊評價極高，可邊吃邊看風景)。" },
+                    { time: "14:00", icon: "camera", text: "視時間可臨時增加參觀 Bukit Rhema (俗稱雞教堂)。" },
+                    { time: "15:30", icon: "camera", text: "前往 Nepal Van Java (爪哇尼泊爾村) 含當地摩托車接駁。" },
+                    { time: "19:00", icon: "utensils", text: "晚餐推薦：Gudeng Yu Djum (品嘗日惹傳統名菜 Gudeg 滷菠蘿蜜)。" },
+                    { time: "21:00", icon: "bed", text: "返回 Aveta Hotel 休息。" }
+                ]
+            },
+            {
+                date: "7/12 (日)", dayTitle: "皇室文化體驗：蘇丹皇宮與水宮", location: "日惹",
+                details: [
+                    { time: "09:00", icon: "camera", text: "參觀蘇丹皇宮 (Kraton) 含皇家馬車博物館 - 專屬英文導遊。" },
+                    { time: "11:30", icon: "camera", text: "參觀水宮 (Taman Sari)。門票25,000IDR，安排專屬英文導遊。" },
+                    { time: "13:00", icon: "utensils", text: "中餐推薦：Bale Raos (專門提供日惹皇室愛吃的精緻爪哇宮廷料理)。" },
+                    { time: "15:00", icon: "shoe-prints", text: "馬力波羅大街 (Malioboro) 徒步自由活動、採購伴手禮。" },
+                    { time: "18:00", icon: "utensils", text: "晚餐：馬力波羅夜市周邊小吃。" },
+                    { time: "20:00", icon: "bed", text: "返回 Aveta Hotel 住宿。" }
+                ]
+            },
+            {
+                date: "7/13 (一)", dayTitle: "地心探險：天光洞與漂漂河", location: "日惹",
+                details: [
+                    { time: "07:30", icon: "car", text: "包車出發 (務必於 09:30 前抵達 Jomblang 景區)。" },
+                    { time: "09:30", icon: "camera", text: "中岜浪天光洞 (Jomblang Cave) 地心探險。含保險、當地風味便當午餐、專業安全裝備（安全帽+雨鞋）與教練。" },
+                    { time: "14:00", icon: "camera", text: "品度爾洞 (Pindul Cave) 漂漂河體驗 (約4小時)。" },
+                    { time: "18:00", icon: "utensils", text: "返回市區，享用日惹特色餐廳與晚餐。" },
+                    { time: "20:30", icon: "bed", text: "返回 Aveta Hotel 住宿。" }
+                ]
+            },
+            {
+                date: "7/14 (二)", dayTitle: "鐵道之旅：前進火山門戶", location: "泗水 ➔ 龐越",
+                details: [
+                    { time: "06:00", icon: "train", text: "前往日惹火車站 (Tugu Yogyakarta)。" },
+                    { time: "06:45", icon: "train", text: "搭乘 SANCAKA 84B (AA級) 火車前往泗水 (Surabaya gubeng)，10:47 抵達。確認包車接機司機。" },
+                    { time: "11:00", icon: "car", text: "抵達泗水，專車接駁並前往布羅莫火山區，途中享用午餐。氣溫下降請提前準備禦寒衣物。" },
+                    { time: "18:00", icon: "utensils", text: "晚餐推薦：於 Jiwa Jawa Bromo Restaurant 享用溫暖的印尼熱湯與特色料理。" },
+                    { time: "20:00", icon: "bed", text: "入住 龐越 Iki ika homestay 四人房 (無附早餐)，提早入睡備戰凌晨起床。" }
+                ]
+            },
+            {
+                date: "7/15 (三)", dayTitle: "月球表面：布羅莫火山日出", location: "布羅莫 ➔ 伊真",
+                details: [
+                    { time: "03:00", icon: "car", text: "換乘 4WD 吉普車，前往觀景台等待布羅莫火山 (Mount Bromo) 日出。" },
+                    { time: "06:00", icon: "camera", text: "穿越黑沙海，步行或騎馬橫渡沙海，攀登250階樓梯直達火山口觀看咆哮。" },
+                    { time: "09:30", icon: "bed", text: "返回酒店享用早餐、盥洗並退房。" },
+                    { time: "10:30", icon: "wallet", text: "支付印尼旅行社餘款 3成 (IDR 16,050,000 / 折合約 USD 905) 用印尼盾現金支付。" },
+                    { time: "11:00", icon: "car", text: "出發沿東爪哇海岸線前往邦多沃索 (Bondowoso)。" },
+                    { time: "13:00", icon: "utensils", text: "中午推薦：沿途海景海鮮餐廳享用現烤鮮魚 (Ikan Bakar)。" },
+                    { time: "17:00", icon: "bed", text: "入住 Bondowoso Baratha Hotel & Resto 雙臥室四人房，極早入睡儲備明日夜爬伊真體力。" }
+                ]
+            },
+            {
+                date: "7/16 (四)", dayTitle: "神秘藍火與跨海渡輪", location: "伊真 ➔ 峇里島羅威那",
+                details: [
+                    { time: "01:00", icon: "camera", text: "出發前往伊真火山 (Ijen Crater) 徒步。配戴防毒面具，親睹全球唯二魔幻藍火 (Blue Fire) 與蒂芬妮藍酸性火山湖。安排專屬英文嚮導。" },
+                    { time: "09:00", icon: "car", text: "下山享用早餐後，前往外南夢 Ketapang 碼頭。" },
+                    { time: "11:00", icon: "ship", text: "搭乘跨海渡輪 (Ferry) 抵達峇里島西端吉利馬努克碼頭 (船程45分)。【抵達後調回台灣/新加坡時間，無時差】" },
+                    { time: "13:00", icon: "car", text: "峇里島包車司機接機，沿途午餐。" },
+                    { time: "15:00", icon: "bed", text: "入住羅威那 Rumi Bumi - Lovina Rice Terrace Boutique Stay。離海灘僅200公尺。" }
+                ]
+            },
+            {
+                date: "7/17 (五)", dayTitle: "追逐海豚與高原湖泊", location: "羅威那 ➔ 烏布",
+                details: [
+                    { time: "06:00", icon: "ship", text: "出海追野生海豚 + 浮潛 + 與海豚游泳（含免費早餐）。" },
+                    { time: "09:30", icon: "car", text: "返回飯店退房，專車南下翻越峇里島高地。" },
+                    { time: "11:00", icon: "camera", text: "前往雙子湖觀景台、Wanagiri Hidden Hill 山頂盪鞦韆、漢達拉門 (Handara Gate) 拍照。" },
+                    { time: "13:00", icon: "utensils", text: "午餐推薦：Mentari Restaurant (水神廟旁印尼式自助餐，景緻優美)。" },
+                    { time: "14:30", icon: "camera", text: "參觀布拉坦水神廟 (Pura Ulun Danu Bratan)。" },
+                    { time: "17:00", icon: "bed", text: "入住烏布 SARI MIMPI KUTUH villa (Jalan Jero Gadung No. 97)。" }
+                ]
+            },
+            {
+                date: "7/18 (六)", dayTitle: "烏布市區漫遊與美食", location: "烏布",
+                details: [
+                    { time: "09:30", icon: "shoe-prints", text: "自由活動日：烏布傳統市集、烏布皇宮 (Puri Agung Peliatan, 不需門票)、Campuhan Ridge Walk 坎普罕山脊自然步道散步。" },
+                    { time: "12:00", icon: "utensils", text: "午餐推薦：Bebek Bengil 髒鴨子餐廳享用酥脆髒鴨餐。" },
+                    { time: "18:00", icon: "utensils", text: "晚餐推薦：Naughty Nuri's 碳烤豬肋排 (深受青少年喜愛，爆汁美式風格)。" },
+                    { time: "20:00", icon: "bed", text: "返回 SARI MIMPI KUTUH villa 休息。" }
+                ]
+            },
+            {
+                date: "7/19 (日)", dayTitle: "網美鞦韆與聖泉寺洗禮", location: "烏布",
+                details: [
+                    { time: "09:00", icon: "car", text: "包車前往德哥拉朗梯田。" },
+                    { time: "10:00", icon: "camera", text: "阿拉斯哈蘭德格拉朗 (Alas Harum Tegallalang) 景區入場門票 & 單人高空天使鞦韆體驗。" },
+                    { time: "13:00", icon: "utensils", text: "午餐推薦：Tis Cafe (梯田無邊際景觀咖啡廳)。" },
+                    { time: "15:00", icon: "camera", text: "參觀聖泉寺 (Tirta Empul) 含門票，體驗千年聖泉淨身祈福。" },
+                    { time: "18:00", icon: "utensils", text: "晚餐：返回烏布市區餐廳用餐。" },
+                    { time: "20:00", icon: "bed", text: "返回 SARI MIMPI KUTUH villa。" }
+                ]
+            },
+            {
+                date: "7/20 (一)", dayTitle: "頂級 SPA 與海神廟夕陽", location: "烏布 ➔ 沙努爾",
+                details: [
+                    { time: "10:00", icon: "spa", text: "中午後出發。預約 Karsa Spa (頂級雨林景觀 SPA) 放鬆身心。" },
+                    { time: "12:00", icon: "utensils", text: "午餐推薦：Bale Udang Mang Engking (水上竹屋享用美味印尼抓飯與烤蝦)。" },
+                    { time: "14:00", icon: "camera", text: "途中可臨時安排 Mengwi 皇家寺廟 (宏偉的世界文化遺產)。" },
+                    { time: "16:00", icon: "camera", text: "前往海神廟 (Tanah Lot Temple) 觀賞絕美海上落日。" },
+                    { time: "18:30", icon: "mobile-screen-button", text: "💡 行程提醒：今晚在飯店利用手機填寫好「新加坡電子入境卡 (SGAC)」。" },
+                    { time: "19:00", icon: "bed", text: "入住沙努爾 Swastika Bungalows 斯瓦提卡別墅酒店 (2間房)。" }
+                ]
+            },
+            {
+                date: "7/21 (二)", dayTitle: "離島跳島：佩尼達島西線一日", location: "沙努爾",
+                details: [
+                    { time: "07:30", icon: "ship", text: "從沙努爾碼頭搭乘快艇前往佩尼達島 (Nusa Penida)。" },
+                    { time: "10:00", icon: "camera", text: "西線離島一日遊：精靈海灘 (Kelingking Beach)、Paluang Cliff。" },
+                    { time: "13:00", icon: "utensils", text: "享用島上當地簡易午餐。" },
+                    { time: "14:30", icon: "camera", text: "參觀破碎沙灘 (Broken Beach)、天使浴池 (Angel's Billabong)、水晶灣 (Crystal Bay)。" },
+                    { time: "16:30", icon: "ship", text: "搭快艇返回沙努爾。回 Swastika Bungalows 別墅酒店休息。" }
+                ]
+            },
+            {
+                date: "7/22 (三)", dayTitle: "南部海岸絕景與傳統火舞", location: "沙努爾 ➔ 庫塔",
+                details: [
+                    { time: "10:00", icon: "car", text: "包車沿南部半島藍色公路前進。" },
+                    { time: "11:00", icon: "camera", text: "美拉斯蒂海灘 (Melasti Beach) 或 潘達瓦海灘 (Pandawa Beach) 二選一戲水拍照。" },
+                    { time: "15:30", icon: "camera", text: "參觀烏魯瓦圖神廟 (Uluwatu Temple) 斷崖海岸絕景。" },
+                    { time: "18:00", icon: "camera", text: "觀賞傳統凱查火舞表演 (Kecak Dance) 伴隨夕陽日落。" },
+                    { time: "20:00", icon: "bed", text: "入住 The Kana Kuta Hotel (Jl. Setiabudi No.8)。" }
+                ]
+            },
+            {
+                date: "7/23 (四)", dayTitle: "告別峇里島，飛往獅城", location: "庫塔 ➔ 新加坡",
+                details: [
+                    { time: "10:00", icon: "shopping-bag", text: "飯店退房後，前往 Krisna Bali 大型土產店採購伴手禮。" },
+                    { time: "12:00", icon: "utensils", text: "庫塔市區午餐。" },
+                    { time: "14:30", icon: "plane", text: "抵達伍拉·賴國際機場 (DPS)。" },
+                    { time: "17:35", icon: "plane", text: "搭乘酷航 TR243 飛往新加坡 (20:25抵達)。訂位代號: R6ESPY。" },
+                    { time: "21:30", icon: "bed", text: "搭車前往市區，入住 York Hotel (Mount Elizabeth路，服務人員可中文)。" }
+                ]
+            },
+            {
+                date: "7/24 (五)", dayTitle: "花園城市：濱海灣與超級樹", location: "新加坡",
+                details: [
+                    { time: "09:00", icon: "camera", text: "出發至魚尾獅公園 (Merlion Park)，搭乘公車至「Fullerton Square (03011)」下車，比從地鐵站更方便。" },
+                    { time: "10:00", icon: "camera", text: "漫步至濱海灣藝術中心 (Esplanade) 拍榴槤外觀，吹冷氣。" },
+                    { time: "11:30", icon: "utensils", text: "前往新達城 (Suntec City) 參觀「財富之泉」沾沾財氣，並在此享用午餐。可在此體驗鴨子船行程。" },
+                    { time: "14:00", icon: "train", text: "寶門廊站 (Promenade) 搭地鐵新路徑直達「濱海灣花園站 (Gardens by the Bay MRT)」。" },
+                    { time: "14:30", icon: "camera", text: "進入濱海灣花園：花穹 (Flower Dome) 與雲霧林 (Cloud Forest) 感受瀑布與熱帶植物。" },
+                    { time: "19:15", icon: "camera", text: "提早至超級樹 (Supertree Grove) 佔地，準備在 19:45 躺在草地上躺平仰望燈光秀。" },
+                    { time: "20:00", icon: "ship", text: "步行至金沙酒店商場 (MBS) 欣賞室內運河，觀賞濱海灣水舞秀 (週五、六加開 22:00 場次)。" },
+                    { time: "22:30", icon: "bed", text: "返回 York Hotel 住宿。" }
+                ]
+            },
+            {
+                date: "7/25 (六)", dayTitle: "星國多元文化與遊船晚餐", location: "新加坡",
+                details: [
+                    { time: "09:30", icon: "camera", text: "遊覽甘榜格南 (Kampong Glam) 、哈芝巷 (Haji Lane) 斑斕壁畫與阿拉伯街特色店家。" },
+                    { time: "12:00", icon: "utensils", text: "中餐推薦：阿拉伯街品嚐地道姜黃飯與拉茶。" },
+                    { time: "14:00", icon: "leaf", text: "漫步前往福康寧公園 (Fort Canning Park) 網美地下螺旋階梯拍綠意盎然的大樹。" },
+                    { time: "16:00", icon: "shoe-prints", text: "前往克拉碼頭 (Clarke Quay) 悠閒散步。" },
+                    { time: "18:00", icon: "utensils", text: "晚餐升級：JUMBO Seafood Riverside Point，必點辣椒螃蟹、麥片蝦與炸饅頭。" },
+                    { time: "20:00", icon: "ship", text: "搭乘新加坡河遊船，迎著晚風欣賞河岸璀璨夜景與金沙水舞秀。" },
+                    { time: "21:30", icon: "bed", text: "返回 York Hotel 休息。" }
+                ]
+            },
+            {
+                date: "7/26 (日)", dayTitle: "滿載而歸：星耀樟宜", location: "新加坡 ✈️ 台北",
+                details: [
+                    { time: "09:00", icon: "bed", text: "York Hotel 辦理退房。前往樟宜機場，參觀星耀樟宜 (Jewel) 的室內大瀑布雨漩渦。" },
+                    { time: "10:30", icon: "plane", text: "辦理酷航 TR872 託運。訂位代號: ACJ85A、O4R95L、GCTVUD、FG5HJH。" },
+                    { time: "12:25", icon: "plane", text: "起飛返回台北 (預計 17:10 抵達桃園國際機場第一航廈)。" },
+                    { time: "17:30", icon: "car", text: "預約機場返家 UBER。第一航廈入境大廳建議上車地點：會面點 15 / 17 / 20 / 23。" }
+                ]
+            }
+        ];
+
+        const hotels = [
+            { dates: "7/10 - 7/14 (4晚)", name: "Aveta Hotel Malioboro", location: "日惹", in: "15:00", out: "12:00", address: "Jl. Malioboro No. 42, Danurejan, 55213 日惹, 印尼", mapLink: "https://maps.app.goo.gl/U3doQxFULhexxzVj7", lat: -7.7925, lng: 110.3659, details: "四人房 | 含早餐 | 室外泳池 (封路時段注意)" },
+            { dates: "7/14 - 7/15 (1晚)", name: "Iki ika homestay", location: "龐越 (火山區)", in: "14:00", out: "12:00", address: "龐越, 東爪哇, 印尼", mapLink: "https://maps.app.goo.gl/8Gr8VUJPRVQ3aZa69", lat: -7.9155, lng: 112.9620, details: "四人房 | 不含早餐 | 凌晨出發登山之行" },
+            { dates: "7/15 - 7/16 (1晚)", name: "Baratha Hotel & Resto", location: "邦多沃索", in: "14:00", out: "11:00", address: "Jl. Saliwiryo Pranowo Gg. Taman No.11, Pattian, Kotakulon, Bondowoso, Jawa Timur 68213 印尼", mapLink: "https://maps.app.goo.gl/pnUwttGB9EKkHAfA6", lat: -7.9130, lng: 113.8217, details: "雙臥室四人房 | 不含早餐 | 洗衣另收費" },
+            { dates: "7/16 - 7/17 (1晚)", name: "Rumi Bumi - Lovina Rice Terrace Boutique Stay", location: "峇里島北部 羅威那", in: "14:00", out: "12:00", address: "Jl. Raya Seririt Gang Mumbul, Anturan, Buleleng, Lovina, Bali 81119 印尼", mapLink: "https://maps.app.goo.gl/jBJNCQBxnq4Ai3R58", lat: -8.1633, lng: 115.0210, details: "2間2人房 | 離海灘200公尺 | 不含早餐 | 聯絡: +62 851-0099-2815" },
+            { dates: "7/17 - 7/20 (3晚)", name: "SARI MIMPI KUTUH villa", location: "峇里島 烏布", in: "15:00", out: "12:00", address: "Jalan Jero Gadung No. 97, Br. Kutuh Kelod, 80571 烏布, 印尼", mapLink: "https://maps.app.goo.gl/bSXgLJEQwccniYJi6", lat: -8.5147, lng: 115.2755, details: "Villa | 含早餐 | 洗衣另付費" },
+            { dates: "7/20 - 7/22 (2晚)", name: "Swastika Bungalows 斯瓦提卡別墅酒店", location: "峇里島 沙努爾", in: "14:00", out: "12:00", address: "Jl. Danau Tamblingan, No. 150, Bali, 80228 沙努爾, 印尼", mapLink: "https://maps.app.goo.gl/aGFy7WE3N9ph7VAE8", lat: -8.6947, lng: 115.2628, details: "2間房 | 含早餐 | 附設養生會館" },
+            { dates: "7/22 - 7/23 (1晚)", name: "The Kana Kuta Hotel", location: "峇里島 庫塔", in: "14:00", out: "12:00", address: "Jl. Setiabudi No.8, Kuta, Kec. Kuta, Kabupaten Badung, Bali 80361 印尼", mapLink: "https://maps.app.goo.gl/Fu2vuJEwa8xqWfhPA", lat: -8.7237, lng: 115.1818, details: "不含早餐 | 鄰近市區方便採買" },
+            { dates: "7/23 - 7/26 (3晚)", name: "York Hotel", location: "新加坡", in: "15:00", out: "11:00", address: "21 Mount Elizabeth, Singapore 228516", mapLink: "https://maps.app.goo.gl/Fu2vuJEwa8xqWfhPA", lat: 1.3079, lng: 103.8344, details: "不含早餐 | 服務人員可中英語溝通" }
+        ];
+
+        const packingList = [
+            {
+                category: "行李 & 證件",
+                items: [
+                    { name: "登機箱 (手提10kg內)", isPink: false },
+                    { name: "托運行李箱 (限158cm內)", isPink: false },
+                    { name: "可收納行李袋", isPink: true },
+                    { name: "文件收納包", isPink: true },
+                    { name: "護照 (效期6個月以上)", isPink: false },
+                    { name: "印尼簽證 (eVOA PDF列印)", isPink: false },
+                    { name: "身分證", isPink: false },
+                    { name: "信用卡 (已開通海外刷卡)", isPink: false },
+                    { name: "中信/富邦金融卡 (開通提款)", isPink: false },
+                    { name: "1吋 + 2吋大頭照備用", isPink: true },
+                    { name: "美金現金 (3000元) / 新幣 (200元)", isPink: false },
+                    { name: "護照、信用卡影本", isPink: true },
+                    { name: "手機 SIM/ESIM 卡及確認信", isPink: false },
+                    { name: "印尼落地簽與入境卡(AIAC)截圖", isPink: false },
+                    { name: "大背包", isPink: false },
+                    { name: "離境機票影本", isPink: false },
+                    { name: "台胞證", isPink: false }
+                ]
+            },
+            {
+                category: "隨身用品",
+                items: [
+                    { name: "旅行 U 型頸枕", isPink: true },
+                    { name: "耳塞 + 眼罩", isPink: true },
+                    { name: "口罩", isPink: false },
+                    { name: "隨身包 / 防盜腰包", isPink: true },
+                    { name: "個人水瓶", isPink: false },
+                    { name: "防曬乳 (高係數)", isPink: false },
+                    { name: "個人藥品", isPink: false },
+                    { name: "環保餐具", isPink: true },
+                    { name: "筆記本與原子筆", isPink: true }
+                ]
+            },
+            {
+                category: "衣物 & 配件",
+                items: [
+                    { name: "帽子 (防風遮陽)", isPink: true },
+                    { name: "太陽眼鏡", isPink: true },
+                    { name: "泳衣泳褲", isPink: false },
+                    { name: "睡衣褲", isPink: false },
+                    { name: "內衣褲", isPink: false },
+                    { name: "備用換洗衣物", isPink: false },
+                    { name: "衣物分類收納袋", isPink: true },
+                    { name: "夾腳拖、涼鞋", isPink: false },
+                    { name: "好走運動鞋 (爬火山防滑鞋底)", isPink: false },
+                    { name: "旅行衣架 / 曬衣繩", isPink: true },
+                    { name: "塑膠袋 (裝髒濕衣服)", isPink: false },
+                    { name: "防曬防寒外套 (火山極冷需要長袖)", isPink: false }
+                ]
+            },
+            {
+                category: "日常與盥洗用具",
+                items: [
+                    { name: "盥洗包 / 牙刷牙膏", isPink: false },
+                    { name: "洗面乳、洗髮精、沐浴乳 (分裝小瓶)", isPink: false },
+                    { name: "大毛巾 (擦身體)", isPink: true },
+                    { name: "小毛巾 (擦頭部用)", isPink: true },
+                    { name: "化妝保養品 / 乳液", isPink: false },
+                    { name: "隱形眼鏡盒 + 保養液", isPink: false },
+                    { name: "衛生棉 (個人衛生用品)", isPink: false },
+                    { name: "刮鬍刀", isPink: false },
+                    { name: "洗臉機", isPink: true }
+                ]
+            },
+            {
+                category: "3C 電子與其他",
+                items: [
+                    { name: "自拍棒 / 腳架", isPink: true },
+                    { name: "印尼/新加坡轉接頭 (雙圓孔/三方孔)", isPink: false },
+                    { name: "插頭擴充器 / 延長線", isPink: true },
+                    { name: "行李秤", isPink: true },
+                    { name: "行動電源 (必須隨身帶上飛機)", isPink: false },
+                    { name: "手機充電器與充電線", isPink: false },
+                    { name: "相機 / 記憶卡 / 電池", isPink: false },
+                    { name: "旅遊交通相關 App & 離線地圖", isPink: false }
+                ]
+            },
+            {
+                category: "東南亞、海島國家專屬用品",
+                items: [
+                    { name: "高效防蚊液", isPink: false },
+                    { name: "泳衣裝備 2 套", isPink: true },
+                    { name: "備用衣物 2 套", isPink: true },
+                    { name: "發燒止瀉常用藥品", isPink: false },
+                    { name: "野餐墊 / 沙灘大浴巾", isPink: true },
+                    { name: "快乾大浴巾", isPink: true },
+                    { name: "晾衣夾 / 曬衣夾", isPink: true },
+                    { name: "GoPro 潛水相機", isPink: true }
+                ]
+            },
+            {
+                category: "個人選配裝備",
+                items: [
+                    { name: "空拍機 (請遵循當地空拍法規)", isPink: true },
+                    { name: "獨立變壓器", isPink: true }
+                ]
+            }
+        ];
+
+        const mapLocations = [
+            // 日惹景點與住宿
+            { name: "日惹 Aveta Hotel Malioboro", lat: -7.7925, lng: 110.3659, category: "hotel", region: "jogja", text: "日惹市中心 Malioboro 街上的高性價比四人房酒店" },
+            { name: "普蘭巴南神廟", lat: -7.7520, lng: 110.4915, category: "attraction", region: "jogja", text: "世界文化遺產，宏偉的爪哇印度教神廟" },
+            { name: "婆羅浮屠", lat: -7.6079, lng: 110.2038, category: "attraction", region: "jogja", text: "世界最大佛教單體遺跡，莊嚴肅穆" },
+            { name: "中岜浪天光洞", lat: -7.9288, lng: 110.6385, category: "attraction", region: "jogja", text: "地底探險，正午天光直射宛如天堂" },
+            { name: "蘇丹皇宮 (Kraton)", lat: -7.8014, lng: 110.3647, category: "attraction", region: "jogja", text: "傳統爪哇蘇丹皇朝宮殿與文化博物館" },
+            { name: "水宮 (Taman Sari)", lat: -7.8098, lng: 110.3591, category: "attraction", region: "jogja", text: "皇家遊樂浴池與神祕地下通道" },
+            // 火山住宿與景點
+            { name: "龐越 Iki ika homestay", lat: -7.9155, lng: 112.9620, category: "hotel", region: "volcano", text: "布羅莫火山山腳下，凌晨出發看日出的絕佳落腳點" },
+            { name: "布羅莫火山", lat: -7.9425, lng: 112.9530, category: "attraction", region: "volcano", text: "如月球表面般的巨大荒漠火山口，咆哮大地" },
+            { name: "Bondowoso Baratha Hotel", lat: -7.9130, lng: 113.8217, category: "hotel", region: "volcano", text: "邦多沃索雙臥室四人房飯店" },
+            { name: "伊真火山 (Ijen)", lat: -8.0581, lng: 114.2415, category: "attraction", region: "volcano", text: "徒步看魔幻藍火與翡翠酸性火山湖" },
+            // 峇里島景點與住宿
+            { name: "羅威那 Rumi Bumi", lat: -8.1633, lng: 115.0210, category: "hotel", region: "bali", text: "羅威那海灘步行200公尺特色稻田客棧" },
+            { name: "烏布 SARI MIMPI KUTUH villa", lat: -8.5147, lng: 115.2755, category: "hotel", region: "bali", text: "烏布市區安靜優雅、帶私人泳池的渡假別墅" },
+            { name: "布拉坦水神廟", lat: -8.2751, lng: 115.1659, category: "attraction", region: "bali", text: "湖畔之上的神聖印度教水神廟" },
+            { name: "海神廟 (Tanah Lot)", lat: -8.6212, lng: 115.0868, category: "attraction", region: "bali", text: "落日絕景著名巨石神廟" },
+            { name: "沙努爾 Swastika Bungalows", lat: -8.6947, lng: 115.2628, category: "hotel", region: "bali", text: "沙努爾充滿綠意的悠閒花園別墅" },
+            { name: "庫塔 The Kana Kuta Hotel", lat: -8.7237, lng: 115.1818, category: "hotel", region: "bali", text: "鬧中取靜的經典商務渡假飯店" },
+            // 新加坡
+            { name: "新加坡 York Hotel", lat: 1.3079, lng: 103.8344, category: "hotel", region: "sg", text: "新加坡烏節路購物圈旁精緻星級飯店" },
+            { name: "魚尾獅公園 (Merlion Park)", lat: 1.2868, lng: 103.8545, category: "attraction", region: "sg", text: "最知名的新加坡地標打卡噴水魚尾獅" },
+            { name: "濱海灣花園超級樹", lat: 1.2820, lng: 103.8640, category: "attraction", region: "sg", text: "夜間聲光秀夢幻垂直花園" }
+        ];
+
+        const attractionDirectory = [
+            {
+                name: "婆羅浮屠",
+                region: "jogja",
+                description: "世界最大、最宏偉的單體佛教遺跡。這座九層金字塔式石台建築建於 8-9 世紀，由 200 多萬塊火山岩堆砌而成，與柬埔寨吳哥窟、中國萬里長城等並稱為古代東方四大奇蹟。",
+                hours: "週二至週日 06:00 - 17:00 (週一僅能在底部花園參觀)",
+                price: "登頂門票: 成人 IDR 375,000 / 學生 IDR 225,000 (通常包含紗籠換穿與專屬導遊)",
+                highlight: "朝陽晨曦佛塔、登頂仰望高聳舍利塔與精細的佛像浮雕故事。",
+                tips: "必須提前數周線上預約登頂特種票。必須配戴官方提供的環保草編鞋(上山會送)，並全程跟隨專人導覽。",
+                difficulty: "⭐️⭐️ (登頂階梯陡峭，長輩需緩步慢行)",
+                icon: "fa-dharmachakra",
+                bgGradient: "from-amber-600 to-yellow-500",
+                lat: -7.6079,
+                lng: 110.2038
+            },
+            {
+                name: "普蘭巴南神廟",
+                region: "jogja",
+                description: "印尼境內最大、最宏偉的印度教神廟群，供奉著濕婆、毗濕奴與梵天三大主神。神廟群的尖塔巍峨直插雲際，是典型南印度神廟建築精髓。",
+                hours: "每日 06:30 - 17:00",
+                price: "成人 IDR 362,500 / 學生 IDR 225,000",
+                highlight: "濕婆殿中高達 47 米的宏偉塔頂、周邊精美的浮雕與浪漫的神廟日落。",
+                tips: "建議在下午 3 點半至 4 點抵達，陽光灑在石雕上呈現耀眼金黃色，極適合逆光拍照。",
+                difficulty: "⭐️ (全程平整石板路，長輩與輪椅無障礙友善)",
+                icon: "fa-gopuram",
+                bgGradient: "from-blue-600 to-indigo-500",
+                lat: -7.7520,
+                lng: 110.4915
+            },
+            {
+                name: "中岜浪天光洞",
+                region: "jogja",
+                description: "千萬年前因地表塌陷而形成的巨型垂直深坑天洞。探險者需要利用繩索垂直降落至 60 米深的洞底，穿過漆黑的古老森林隧道，去目睹正午時分「上帝之光」灑入地心的魔幻景象。",
+                hours: "每日 09:00 - 13:00 (因天光只在正午，所以每日僅此一時段)",
+                price: "IDR 1,000,000 起 / 人 (包含專業安全裝備、安全帽、教練、保險及當地風味餐)",
+                highlight: "11:30 - 12:30 射入洞內最深處的筆直光柱，猶如天堂降臨。",
+                tips: "每天限制人數，必須於早上 09:30 前抵達景區排隊。洞內極為泥濘，務必穿著景區提供的雨鞋，建議多帶一套換洗襪子與衣服。",
+                difficulty: "⭐️⭐️⭐️⭐️ (下斜坡、走黑石隧道泥濘路，體力要求高，不適合行動不便的長輩)",
+                icon: "fa-mountain",
+                bgGradient: "from-teal-600 to-emerald-500",
+                lat: -7.9288,
+                lng: 110.6385
+            },
+            {
+                name: "布羅莫火山",
+                region: "volcano",
+                description: "被譽為「地球上最像月球表面」的地方。這座活火山靜靜臥在一個巨大的古老火口盆地中，周邊圍繞著黑沙海，隨時都在噴吐火山迷霧，氣勢磅礡、宛如異星世界。",
+                hours: "24小時開放 (通常在凌晨 03:00 起床出發看日出)",
+                price: "已包含在印尼 Bintang 旅行社行程總報價內",
+                highlight: "Penanjakan 觀景台眺望布羅莫日出、坐4WD吉普車穿越黑沙海、攀登250階火山梯。",
+                tips: "山上清晨氣溫僅 5-10°C，寒風刺骨。必須攜帶防風保暖外套、毛帽、手套和防滑鞋。火山口硫磺氣味強烈，建議自備高防護口罩。",
+                difficulty: "⭐️⭐️⭐️ (凌晨起床精神考驗大，攀登火山口階梯需要適當體力)",
+                icon: "fa-volcano",
+                bgGradient: "from-orange-600 to-red-500",
+                lat: -7.9425,
+                lng: 112.9530
+            },
+            {
+                name: "伊真火山 (Ijen)",
+                region: "volcano",
+                description: "以「夜間魔幻藍火」與「Tiffany藍高濃度酸性湖」聞名全球的奇幻火山。這裡有世界上最艱苦的硫磺採礦人，藍色的火焰是由高壓液體硫磺氣體燃燒而產生的超自然景觀。",
+                hours: "每日 01:00 准許入山 (必須深夜夜爬)",
+                price: "已包含在旅行社包車報價中 (包含專業嚮導與防毒面具租借)",
+                highlight: "深夜親眼看見暗夜中燃燒的神秘藍色火焰、清晨看火山湖升起裊裊白煙與金黃日出。",
+                tips: "夜爬單程約 3 公里急陡坡，需要走 2 小時。山谷中含有強烈劇毒二氧化硫，必須全程戴緊防毒面具。眼睛易受酸氣刺激，可攜帶防風鏡或眼藥水。",
+                difficulty: "⭐️⭐️⭐️⭐️⭐️ (急陡坡夜爬、高難度缺氧與有毒氣體，心血管疾病者或行動不便長輩嚴禁下行至谷底)",
+                icon: "fa-cloud-meatball",
+                bgGradient: "from-purple-600 to-indigo-700",
+                lat: -8.0581,
+                lng: 114.2415
+            },
+            {
+                name: "烏魯瓦圖斷崖神廟",
+                region: "bali",
+                description: "矗立於峇里島最南端、高達 70 米懸崖邊上的印度教神廟。腳下是波濤洶湧的印度洋，這裡是觀賞峇里島絕美落日、和感受海浪衝擊斷崖的壯麗位置。",
+                hours: "每日 07:00 - 19:00",
+                price: "神廟門票 IDR 50,000 / Kecak 火舞表演門票 IDR 150,000 左右",
+                highlight: "日落斷崖絕景、18:00 開始無任何背景音樂、純人聲伴奏的印度教传统凱查火舞秀 (Kecak Dance)。",
+                tips: "神廟內的野生猴子極多且非常搶匪，會扯掉遊客的眼鏡、耳環、草帽和手機。進入前務必將所有隨身裝飾品收進背包深處！",
+                difficulty: "⭐️⭐️ (沿斷崖小路漫步，階梯較多，但有欄杆，長輩友好)",
+                icon: "fa-fire",
+                bgGradient: "from-pink-600 to-rose-500",
+                lat: -8.8291,
+                lng: 115.0860
+            },
+            {
+                name: "新加坡濱海灣花園",
+                region: "sg",
+                description: "新加坡「花園城市」的頂級科技縮影。園區擁有佔地廣闊的無柱巨型冷氣玻璃溫室，以及 18 顆高聳入雲、覆滿熱帶攀緣植物、到了夜晚會發出夢幻聲光效果的鋼鐵「超級樹」。",
+                hours: "戶外花園 05:00 - 02:00 / 雙冷氣溫室 09:00 - 21:00",
+                price: "雙溫室套票: 約 SGD 53 / 超級樹空中步道: SGD 14 左右",
+                highlight: "雲霧林中高達 35 米的全球最大室內人造瀑布、晚上 19:45 準時演出的超級樹聲光燈光秀。",
+                tips: "看超級樹燈光秀最好在 19:15 提早到樹下「躺平」仰望。雙冷氣溫室內冷氣強度極強，請隨身攜帶薄長袖外套以免受涼。",
+                difficulty: "⭐️ (全區無障礙設施極其發達，對老人、嬰兒車極度友善)",
+                icon: "fa-tree",
+                bgGradient: "from-teal-500 to-cyan-500",
+                lat: 1.2820,
+                lng: 103.8640
+            },
+            {
+                name: "甘榜格南",
+                region: "sg",
+                description: "新加坡古老歷史的馬來、穆斯林文化街區。以宏偉的蘇丹回教堂金色穹頂為核心，兩旁街道開滿了精美的波斯地毯店、香水店以及鋪滿繽紛網美壁畫的哈芝巷。",
+                hours: "24小時開放 (店面大多在 11:00 - 21:00 營業)",
+                price: "街區參觀免費",
+                highlight: "金碧輝煌的蘇丹回教堂外觀、哈芝巷 (Haji Lane) 特色斑斕壁畫、享用道地印度/中東美食與拉茶。",
+                tips: "若想進入蘇丹回教堂內部參觀，必須穿著不露肩膀與雙腿的保守服裝，門口備有免費長袍借穿。午後天氣炎熱，可多到特色咖啡廳吹冷氣歇息。",
+                difficulty: "⭐️ (市區人行道平整，散步慢行即可)",
+                icon: "fa-mosque",
+                bgGradient: "from-emerald-600 to-teal-500",
+                lat: 1.3023,
+                lng: 103.8598
+            }
+        ];
+
+        const categoryConfig = {
+            attraction: { color: "#3b82f6", icon: "fa-camera", label: "景點" },
+            food: { color: "#f59e0b", icon: "fa-utensils", label: "餐廳" },
+            hotel: { color: "#10b981", icon: "fa-bed", label: "住宿" }
+        };
+
+        let map;
+        let markersGroup;
+        let currentRegion = 'all';
+        let currentCategory = 'all';
+        let currentAttrRegion = 'all';
+
+        // 頁面加載完成後的初始化
+        window.onload = function() {
+            renderItinerary();
+            renderHotels();
+            renderPackingChecklist();
+            renderAttractions();
+        };
+
+        function renderItinerary() {
+            const itineraryContainer = document.getElementById('itinerary-container');
+            itineraryContainer.innerHTML = '';
+            itineraryData.forEach((day, index) => {
+                const isFirst = index === 0;
+                const html = `
+                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 mb-3">
+                        <button class="w-full text-left px-5 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition duration-150" onclick="toggleAccordion(${index})">
+                            <div class="flex items-center gap-3">
+                                <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-md min-w-[60px] text-center">${day.date}</span>
+                                <div>
+                                    <h3 class="font-bold text-gray-800 text-sm sm:text-base">${day.dayTitle}</h3>
+                                    <p class="text-xs text-gray-500 mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>${day.location}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i id="icon-${index}" class="fa-solid fa-chevron-${isFirst ? 'up' : 'down'} text-gray-400"></i>
+                            </div>
+                        </button>
+                        <div id="content-${index}" class="accordion-content px-5 ${isFirst ? 'py-4 max-h-[1200px]' : 'py-0 max-h-0'} overflow-hidden">
+                            
+                            <!-- 每日行程頂端加入 AI 攻略導航按鈕 -->
+                            <div class="mb-4 flex justify-end">
+                                <button onclick="askAIDayAdvice('${day.date}', '${day.dayTitle}', '${day.location}')" class="text-xs bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white font-medium px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1 transition transform hover:scale-102">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> 🔍 詢問 AI 此日防坑與拍照攻略
+                                </button>
+                            </div>
+
+                            <div class="relative border-l-2 border-blue-200 ml-3 pl-5 space-y-5 py-2">
+                                ${day.details.map(item => {
+                                    let mapBtnHtml = '';
+                                    const matchedLoc = mapLocations.find(loc => item.text.includes(loc.name) || (loc.name !== 'Lovina' && item.text.includes(loc.name.split(' ')[0])));
+                                    if (matchedLoc) {
+                                        mapBtnHtml = `
+                                            <button onclick="focusOnLocation(${matchedLoc.lat}, ${matchedLoc.lng}, '${matchedLoc.name}')" class="ml-1.5 inline-flex items-center gap-0.5 bg-blue-50 hover:bg-blue-100 text-blue-600 text-[10px] font-bold px-1.5 py-0.5 rounded border border-blue-200 transition">
+                                                <i class="fa-solid fa-map-location-dot"></i> 地圖
+                                            </button>
+                                        `;
+                                    }
+                                    return `
+                                    <div class="relative">
+                                        <div class="absolute -left-[29px] bg-white rounded-full p-1">
+                                            <div class="bg-blue-100 text-blue-600 w-6 h-6 rounded-full flex items-center justify-center text-[10px]">
+                                                <i class="fa-solid fa-${item.icon}"></i>
+                                            </div>
+                                        </div>
+                                        <div class="text-sm">
+                                            <span class="font-bold text-blue-700 mr-2">${item.time}</span>
+                                            <span class="text-gray-700">${item.text}</span>
+                                            ${mapBtnHtml}
+                                        </div>
+                                    </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                itineraryContainer.innerHTML += html;
+            });
+        }
+
+        function renderHotels() {
+            const hotelContainer = document.getElementById('hotel-container');
+            hotelContainer.innerHTML = '';
+            hotels.forEach(hotel => {
+                hotelContainer.innerHTML += `
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-teal-500 shadow-sm flex flex-col justify-between gap-3">
+                        <div class="flex-1">
+                            <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded mb-2 inline-block">${hotel.dates}</span>
+                            <h3 class="font-bold text-lg text-gray-800">${hotel.name}</h3>
+                            <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-location-dot mr-1"></i>${hotel.location}</p>
+                            <p class="text-xs text-blue-600 mt-1 font-mono bg-blue-50 px-2 py-1 rounded-md border border-blue-100 inline-block">
+                                📌 導航：<a href="${hotel.mapLink}" target="_blank" class="underline hover:text-blue-800">${hotel.address}</a>
+                            </p>
+                            <p class="text-xs text-gray-600 mt-2 bg-gray-50 p-2 rounded">${hotel.details}</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-3 flex flex-row sm:flex-col justify-around sm:justify-center min-w-[140px] text-xs sm:text-right">
+                            <p><span class="text-gray-400">IN</span> <span class="font-medium font-mono">${hotel.in}</span></p>
+                            <p class="mt-0 sm:mt-1"><span class="text-gray-400">OUT</span> <span class="font-medium font-mono">${hotel.out}</span></p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderAttractions() {
+            const gallery = document.getElementById('attractions-gallery');
+            gallery.innerHTML = '';
+
+            attractionDirectory.forEach(attr => {
+                if (currentAttrRegion !== 'all' && attr.region !== currentAttrRegion) return;
+
+                const cardHtml = `
+                    <div class="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300">
+                        <!-- 卡片頂部漸變與標題 -->
+                        <div class="bg-gradient-to-r ${attr.bgGradient} text-white p-4 flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid ${attr.icon} text-lg"></i>
+                                <h3 class="font-bold text-base tracking-wide">${attr.name}</h3>
+                            </div>
+                            <span class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">
+                                ${attr.region === 'jogja' ? '日惹' : attr.region === 'volcano' ? '雙火山' : attr.region === 'bali' ? '峇里島' : '新加坡'}
+                            </span>
+                        </div>
+                        
+                        <!-- 卡片主要內容 -->
+                        <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                            <div class="space-y-2">
+                                <p class="text-xs text-gray-600 leading-relaxed">${attr.description}</p>
+                                
+                                <div class="text-[11px] space-y-1 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+                                    <p><span class="font-bold text-gray-700">⏱️ 開放時間:</span> <span class="text-gray-600">${attr.hours}</span></p>
+                                    <p><span class="font-bold text-gray-700">💵 門票預估:</span> <span class="text-gray-600">${attr.price}</span></p>
+                                    <p><span class="font-bold text-gray-700">💡 經典亮點:</span> <span class="text-gray-600 font-medium text-indigo-700">${attr.highlight}</span></p>
+                                    <p class="text-rose-600"><span class="font-bold text-rose-700">⚠️ 防坑叮嚀:</span> ${attr.tips}</p>
+                                </div>
+                            </div>
+                            
+                            <!-- 體力考驗與按鈕 -->
+                            <div class="pt-2 border-t border-slate-100">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-[10px] text-gray-400 font-bold">長輩與小孩體力考驗:</span>
+                                    <span class="text-xs font-bold text-amber-500 font-mono">${attr.difficulty}</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="focusOnLocation(${attr.lat}, ${attr.lng}, '${attr.name}')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-lg text-center transition flex items-center justify-center gap-1">
+                                        <i class="fa-solid fa-map-location-dot"></i> 地圖定位
+                                    </button>
+                                    <button onclick="askAIAboutAttraction('${attr.name}')" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 rounded-lg text-center transition flex items-center justify-center gap-1">
+                                        <i class="fa-solid fa-robot"></i> 🤖 詢問 AI 攻略
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                gallery.innerHTML += cardHtml;
+            });
+        }
+
+        // 篩選景點分區
+        function filterAttractionRegion(region) {
+            currentAttrRegion = region;
+            document.querySelectorAll('.attr-filter-btn').forEach(btn => {
+                btn.className = "attr-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition";
+            });
+            event.currentTarget.className = "attr-filter-btn text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition shadow-sm";
+            renderAttractions();
+        }
+
+        function renderPackingChecklist() {
+            const packingContainer = document.getElementById('packing-container');
+            packingContainer.innerHTML = '';
+            packingList.forEach((group, gIndex) => {
+                let itemsHtml = group.items.map((item, iIndex) => {
+                    const id = `check-${gIndex}-${iIndex}`;
+                    const checked = localStorage.getItem(id) === 'true' ? 'checked' : '';
+                    const isPinkClass = item.isPink ? 'pink-item font-semibold' : 'text-gray-700';
+                    const pinkBadge = item.isPink ? '<span class="text-[10px] bg-pink-50 text-pink-600 border border-pink-200 px-1 rounded ml-1 font-bold">🌸 自備</span>' : '';
+                    return `
+                    <div class="flex items-start mb-2 hover:bg-slate-50 p-1 rounded transition">
+                        <input type="checkbox" id="${id}" class="checkbox-custom mt-1 h-4 w-4 text-teal-600 rounded border-gray-300 focus:ring-teal-500" ${checked} onchange="saveChecklist('${id}')">
+                        <label for="${id}" class="ml-2 text-sm cursor-pointer select-none flex-1 flex items-center gap-1 ${isPinkClass}">
+                            ${item.name} ${pinkBadge}
+                        </label>
+                    </div>
+                    `;
+                }).join('');
+                
+                packingContainer.innerHTML += `
+                    <div class="mb-4 bg-gray-50/50 p-3 rounded-xl border border-gray-100">
+                        <h4 class="font-bold text-gray-800 text-sm mb-2 bg-gray-100 px-3 py-1.5 rounded">${group.category}</h4>
+                        <div class="pl-2">
+                            ${itemsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('block'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('border-white', 'text-white');
+                el.classList.add('border-transparent', 'text-white/70');
+            });
+            
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`content-${tabId}`).classList.add('block');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.remove('border-transparent', 'text-white/70');
+            activeBtn.classList.add('border-white', 'text-white');
+
+            if (tabId === 'map') {
+                setTimeout(() => {
+                    initMap();
+                }, 100);
+            }
+        }
+
+        function initMap() {
+            if (map) {
+                map.invalidateSize();
+                return;
+            }
+
+            // 初始化地圖視角，置中在印尼
+            map = L.map('map').setView([-8.4095, 115.1889], 7);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap &copy; CARTO'
+            }).addTo(map);
+
+            markersGroup = L.layerGroup().addTo(map);
+            renderMapMarkers();
+        }
+
+        function createCustomPin(category) {
+            const config = categoryConfig[category] || categoryConfig.attraction;
+            return L.divIcon({
+                html: `
+                    <div class="relative w-8 h-8 rounded-full flex items-center justify-center border-2 border-white shadow-md transform transition hover:scale-115" style="background-color: ${config.color};">
+                        <i class="fa-solid ${config.icon} text-white text-xs"></i>
+                    </div>
+                `,
+                className: '',
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32]
+            });
+        }
+
+        function renderMapMarkers() {
+            if (!map) return;
+            markersGroup.clearLayers();
+
+            const placesListEl = document.getElementById('map-places-list');
+            placesListEl.innerHTML = '';
+
+            let bounds = L.latLngBounds();
+            let count = 0;
+
+            mapLocations.forEach(loc => {
+                const matchesRegion = (currentRegion === 'all' || loc.region === currentRegion);
+                const matchesCategory = (currentCategory === 'all' || loc.category === currentCategory);
+
+                if (matchesRegion && matchesCategory) {
+                    count++;
+                    const latLng = [loc.lat, loc.lng];
+                    bounds.extend(latLng);
+
+                    const marker = L.marker(latLng, {
+                        icon: createCustomPin(loc.category),
+                        title: loc.name
+                    });
+
+                    const config = categoryConfig[loc.category] || categoryConfig.attraction;
+                    const googleNavUrl = `https://www.google.com/maps/search/?api=1&query=${loc.lat},${loc.lng}`;
+                    
+                    const popupHtml = `
+                        <div class="p-1 max-w-[200px]">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <span class="text-[10px] font-bold text-white px-1.5 py-0.5 rounded" style="background-color: ${config.color};">${config.label}</span>
+                                <h4 class="font-bold text-sm text-gray-800 m-0">${loc.name}</h4>
+                            </div>
+                            <p class="text-xs text-gray-600 leading-normal mb-2">${loc.text}</p>
+                            <a href="${googleNavUrl}" target="_blank" class="block text-center text-[11px] bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1 rounded no-underline transition shadow-sm">
+                                <i class="fa-solid fa-diamond-turn-right mr-1"></i> Google Maps 導航
+                            </a>
+                        </div>
+                    `;
+                    marker.bindPopup(popupHtml);
+                    
+                    marker.customName = loc.name;
+                    markersGroup.addLayer(marker);
+
+                    const cardHtml = `
+                        <button onclick="focusOnLocation(${loc.lat}, ${loc.lng}, '${loc.name}')" class="flex items-center gap-3 p-2 bg-gray-50 hover:bg-blue-50 border border-gray-100 hover:border-blue-200 rounded-lg text-left transition text-xs">
+                            <span class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-2 border-white text-white" style="background-color: ${config.color};">
+                                <i class="fa-solid ${config.icon} text-xs"></i>
+                            </span>
+                            <div class="overflow-hidden">
+                                <p class="font-bold text-gray-800 truncate">${loc.name}</p>
+                                <p class="text-[10px] text-gray-500 truncate">${loc.text}</p>
+                            </div>
+                        </button>
+                    `;
+                    placesListEl.innerHTML += cardHtml;
+                }
+            });
+
+            if (count > 0) {
+                map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
+            }
+        }
+
+        function focusOnLocation(lat, lng, name) {
+            switchTab('map');
+            setTimeout(() => {
+                if (!map) initMap();
+                map.setView([lat, lng], 15, { animate: true, duration: 1.2 });
+                markersGroup.eachLayer(layer => {
+                    if (layer.customName === name) {
+                        layer.openPopup();
+                    }
+                });
+                document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 180);
+        }
+
+        function filterMapRegion(region) {
+            currentRegion = region;
+            document.querySelectorAll('#region-filters button').forEach(btn => {
+                btn.className = "map-reg-btn text-xs font-semibold px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition";
+            });
+            event.currentTarget.className = "map-reg-btn text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-600 text-white transition";
+            renderMapMarkers();
+        }
+
+        function filterMapCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('#category-filters button').forEach(btn => {
+                btn.className = "map-cat-btn text-[11px] px-2.5 py-1 rounded-md bg-gray-100 text-gray-600 hover:bg-gray-200 transition";
+            });
+            event.currentTarget.className = "map-cat-btn text-[11px] px-2.5 py-1 rounded-md bg-teal-500 text-white transition";
+            renderMapMarkers();
+        }
+
+        function toggleAccordion(index) {
+            const content = document.getElementById(`content-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            if (content.style.maxHeight || content.classList.contains('max-h-[1200px]')) {
+                content.style.maxHeight = null;
+                content.classList.remove('max-h-[1200px]', 'py-4');
+                content.classList.add('max-h-0', 'py-0');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.classList.remove('max-h-0', 'py-0');
+                content.classList.add('py-4');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+
+        function expandAll() {
+            itineraryData.forEach((_, index) => {
+                const content = document.getElementById(`content-${index}`);
+                const icon = document.getElementById(`icon-${index}`);
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.classList.remove('max-h-0', 'py-0');
+                content.classList.add('py-4');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            });
+        }
+
+        function saveChecklist(id) {
+            const isChecked = document.getElementById(id).checked;
+            localStorage.setItem(id, isChecked);
+        }
+
+        let modalConfirmCallback = null;
+
+        function showCustomModal(title, message, isAlert = false, confirmText = "確認", callback = null) {
+            const modal = document.getElementById('custom-modal');
+            const titleEl = document.getElementById('modal-title');
+            const msgEl = document.getElementById('modal-message');
+            const btnCancel = document.getElementById('modal-btn-cancel');
+            const btnConfirm = document.getElementById('modal-btn-confirm');
+            const iconContainer = document.getElementById('modal-icon-container');
+
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+            btnConfirm.innerText = confirmText;
+            modalConfirmCallback = callback;
+
+            if (isAlert) {
+                btnCancel.classList.add('hidden');
+                btnConfirm.className = "px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white transition";
+                iconContainer.className = "flex items-center gap-3 text-blue-500 mb-3";
+                iconContainer.innerHTML = '<i class="fa-solid fa-circle-info text-2xl"></i><h3 class="font-bold text-lg text-gray-800" id="modal-title">' + title + '</h3>';
+            } else {
+                btnCancel.classList.remove('hidden');
+                btnConfirm.className = "px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white transition";
+                iconContainer.className = "flex items-center gap-3 text-amber-500 mb-3";
+                iconContainer.innerHTML = '<i class="fa-solid fa-circle-question text-2xl"></i><h3 class="font-bold text-lg text-gray-800" id="modal-title">' + title + '</h3>';
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.add('opacity-100');
+                modal.children[0].classList.remove('scale-95');
+            }, 10);
+
+            btnConfirm.onclick = function() {
+                closeCustomModal();
+                if (modalConfirmCallback) modalConfirmCallback();
+            };
+        }
+
+        function closeCustomModal() {
+            const modal = document.getElementById('custom-modal');
+            modal.classList.remove('opacity-100');
+            modal.children[0].classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function showResetConfirmModal() {
+            showCustomModal("重置打包清單", "確定要清除所有已勾選的行李項目嗎？此操作無法還原。", false, "確定清除", function() {
+                document.querySelectorAll('.checkbox-custom').forEach(cb => {
+                    cb.checked = false;
+                    localStorage.removeItem(cb.id);
+                });
+                renderPackingChecklist();
+            });
+        }
+
+        function shareTrip() {
+            const dummyUrl = window.location.href; 
+            navigator.clipboard.writeText(dummyUrl).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.remove('opacity-0', 'pointer-events-none');
+                toast.classList.add('opacity-100');
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100');
+                    toast.classList.add('opacity-0', 'pointer-events-none');
+                }, 3000);
+            }).catch(err => {
+                showCustomModal("分享提示", "您可以直接將此 HTML 網頁傳送或 LINE 給家人，即可隨時離線互動查看！", true, "好的");
+            });
+        }
+
+        // ==================== Gemini AI 功能模組 ====================
+        const systemPrompt = `你是一位世界頂級的家庭自助旅遊規劃師，現在被聘為本「印尼（日惹、泗水、峇里島）與新加坡 17 日遊家族旅行」隨行 AI 秘書。
+        
+        【出發時間與基本時區資訊】
+        - 日期：2026.7.10 (五) - 2026.7.26 (日)，7/9 晚上 22:30 出門出發。
+        - 時差：日惹、泗水比台灣/新加坡/峇里島慢1小時。峇里島與新加坡、台灣無時差。
+        - 飛機訂位代碼：去程 NCD86D / 峇里島-新加坡 R6ESPY / 新加坡回程四個組代碼：ACJ85A、O4R95L、GCTVUD、FG5HJH。
+        - 本地網卡：已買 DJB (慈、川) 及 威訊 (妞、昭)。
+        - 旅伴：全家大小，包含青少年、大人，屬於溫馨家族出遊。
+        
+        【印尼包車旅行社付款與小費說明】
+        - 印尼旅行社包車聯絡人：Bintang (WhatsApp：+6281390007303)，Java Trails Indonesia。
+        - 包車總費用：IDR 53,500,000 (約台幣 95,127 元)。
+        - 付款紀錄：
+          • 1. 訂金 3成 (5/25富邦已付台幣 29,765，含4%手續費共 IDR 16,692,000)。
+          • 2. 7/10現場餘款 4成 (IDR 21,400,000)，需在日惹現場以印尼盾現金付給司機(或美金換算支付約 USD 1205)。
+          • 3. 7/15現場餘款 3成 (IDR 16,050,000)，在火山現場以印尼盾現金付清(或美金換算支付約 USD 905)。
+        - 峇里島包車小費標準：
+          • 全天(8-12H)行程：IDR 100,000 (約台幣177元，可按天在行程結束時付給司機)。給紙鈔，硬幣會被視為施捨而極為失禮！
+        
+        【簽證與出入境正確配置】
+        - 印尼：需要事先申請電子落地簽(eVOA，4人已刷卡支付NTD3708)、抵達前3天內填寫免費的印尼入境卡(AIAC)，進入峇里島前已付妥觀光稅。
+        - 新加坡：免簽。需在抵達前72小時內免費填寫「新加坡電子入境卡 (SGAC)」。
+        - 電壓與通訊：印尼為220V雙孔圓形歐規；新加坡為230V三方孔英規。
+
+        【回答守則】
+        1. 使用繁體中文(台灣常用用語)回答，語氣必須貼心、體貼。
+        2. 針對家人的問題，提供高評價的避坑與防踩雷技巧，特別重視爬布羅莫與伊真火山的保暖（凌晨溫度低至5-10度、有硫磺煙需要防毒面具）、防滑运动鞋、聖泉寺紗籠換穿、日惹Aveta Hotel附近封路應變等。
+        3. 排版美觀、多用 Emoji，並適度引用您大腦中對行程中真實飯店與餐廳的了解。`;
+
+        async function callGemini(prompt) {
+            const apiKey = ""; // 執行時由平台自動注入
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                }
+            };
+
+            let delay = 1000;
+            const maxAttempts = 4;
+
+            for (let attempt = 0; attempt < maxAttempts; attempt++) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.status === 429 || response.status >= 500) {
+                        throw new Error(`API 錯誤: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "AI 忙碌中，請稍後再試。";
+
+                } catch (error) {
+                    if (attempt === maxAttempts - 1) {
+                        return "抱歉，AI 秘書目前伺服器忙碌。請稍候重試！";
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        function toggleAICopilot() {
+            const drawer = document.getElementById('ai-copilot-drawer');
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('translate-x-full');
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            appendChatMessage('user', userText);
+            input.value = '';
+
+            const loadingId = appendChatLoading();
+            const aiResponse = await callGemini(userText);
+            removeChatLoading(loadingId);
+            appendChatMessage('ai', aiResponse);
+        }
+
+        function sendQuickPrompt(promptText) {
+            document.getElementById('chat-input').value = promptText;
+            sendMessage();
+        }
+
+        function appendChatMessage(sender, text) {
+            const history = document.getElementById('chat-history');
+            const isUser = sender === 'user';
+            
+            const msgHtml = `
+                <div class="flex gap-2.5 items-start ${isUser ? 'flex-row-reverse' : ''}">
+                    <div class="w-8 h-8 rounded-full ${isUser ? 'bg-teal-100 text-teal-600' : 'bg-blue-100 text-blue-600'} flex items-center justify-center text-xs shrink-0 font-bold">
+                        ${isUser ? '我' : 'AI'}
+                    </div>
+                    <div class="${isUser ? 'bg-teal-500 text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none border border-gray-100'} p-3 rounded-lg shadow-sm text-sm max-w-[85%] whitespace-pre-line leading-relaxed">
+                        ${text}
+                    </div>
+                </div>
+            `;
+            
+            history.insertAdjacentHTML('beforeend', msgHtml);
+            history.scrollTop = history.scrollHeight;
+        }
+
+        function appendChatLoading() {
+            const history = document.getElementById('chat-history');
+            const id = 'loading-' + Date.now();
+            
+            const loadingHtml = `
+                <div id="${id}" class="flex gap-2.5 items-start">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs shrink-0 font-bold">AI</div>
+                    <div class="bg-white p-3 rounded-lg rounded-tl-none border border-gray-100 shadow-sm max-w-[85%]">
+                        <div class="typing-indicator flex items-center gap-1">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            history.insertAdjacentHTML('beforeend', loadingHtml);
+            history.scrollTop = history.scrollHeight;
+            return id;
+        }
+
+        function removeChatLoading(id) {
+            const loader = document.getElementById(id);
+            if (loader) loader.remove();
+        }
+
+        async function askAIDayAdvice(date, dayTitle, location) {
+            const drawer = document.getElementById('ai-copilot-drawer');
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+            }
+
+            const prompt = `我想針對行程中 ${date} (標題: ${dayTitle} / 地點: ${location}) 這天的安排詢問 AI 即時指南。
+            請根據你的系統知識與旅遊經驗，詳細提供：
+            1. 這天造訪景點的防坑指南、門票或交通注意事項。
+            2. 適合家族青少年與大人的體力安排建議，是否有長輩友善性評估？
+            3. 特色必拍機位、建議穿搭衣服。
+            4. 推薦路線沿途，是否有值得造訪的在地高評價隱藏美食餐廳或必喝飲料？`;
+
+            appendChatMessage('user', `🔍 正在研擬 ${date} ${dayTitle} 的 AI 即時防坑與拍照攻略...`);
+            const loadingId = appendChatLoading();
+            const response = await callGemini(prompt);
+            removeChatLoading(loadingId);
+            appendChatMessage('ai', response);
+        }
+
+        async function askAIAboutAttraction(name) {
+            const drawer = document.getElementById('ai-copilot-drawer');
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+            }
+
+            const prompt = `我想深入了解景點「${name}」的深度旅遊與拍照攻略。
+            請詳細提供：
+            1. 最佳造訪時間點與避開人群的技巧。
+            2. 最完美的網美/風景照相機機位（如何站位、如何構圖）。
+            3. 為攜帶長輩或小孩的家庭旅伴，提供貼心的安全提醒與舒適度建議。
+            4. 附近 10 分鐘路程內是否有高評價且衛生安全的餐飲推薦？`;
+
+            appendChatMessage('user', `🤖 正在跟隨行秘書諮詢「${name}」的深度照相與避坑指南...`);
+            const loadingId = appendChatLoading();
+            const response = await callGemini(prompt);
+            removeChatLoading(loadingId);
+            appendChatMessage('ai', response);
+        }
+
+        // AI 打包清單生成器邏輯
+        let latestAiPackItems = [];
+
+        async function generateAIPackingList() {
+            const input = document.getElementById('ai-pack-input');
+            const userDemand = input.value.trim();
+            if (!userDemand) {
+                showCustomModal("輸入提示", "請輸入您或家人的特殊需求（如：我有帶2歲嬰兒、我是專業攝影/空拍師）", true, "好的");
+                return;
+            }
+
+            const btn = document.querySelector('button[onclick="generateAIPackingList()"]');
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin mr-1"></i>管家計算中...';
+            btn.disabled = true;
+
+            const prompt = `使用者在印尼、新加坡17日家族旅遊時，有以下特殊行李打包需求：\n「${userDemand}」\n
+            請針對此需求，推薦 **5 到 7 個** 容易忽略且一定要攜帶的專屬實用物品。
+            
+            【格式要求】
+            只需條列式列出，每行一個項目，不要有任何多餘的解釋或說明，直接給名稱。
+            例如：
+            - 長輩防風保暖連帽外套
+            - 空拍機專用槳葉保護罩
+            - 備用大容量記憶卡`;
+
+            const response = await callGemini(prompt);
+            const items = response.split('\n')
+                                  .map(line => line.replace(/^[-\*\d\.\s]+/, '').trim())
+                                  .filter(line => line.length > 0 && line.length < 30);
+
+            latestAiPackItems = items;
+
+            const resultContainer = document.getElementById('ai-pack-result');
+            const listEl = document.getElementById('ai-pack-list');
+            listEl.innerHTML = '';
+
+            if (items.length > 0) {
+                items.forEach(item => {
+                    listEl.innerHTML += `<li>${item}</li>`;
+                });
+                resultContainer.classList.remove('hidden');
+            } else {
+                showCustomModal("生成失敗", "抱歉，無法解析生成結果。請換個輸入方式再試一次！", true, "好的");
+            }
+
+            btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles mr-1"></i>生成';
+            btn.disabled = false;
+        }
+
+        function addAIPackToChecklist() {
+            if (latestAiPackItems.length === 0) return;
+
+            let targetGroup = packingList.find(g => g.category === "🌸 AI 推薦智慧行李項目");
+            if (!targetGroup) {
+                targetGroup = { category: "🌸 AI 推薦智慧行李項目", items: [] };
+                packingList.push(targetGroup);
+            }
+
+            latestAiPackItems.forEach(item => {
+                if (!targetGroup.items.some(i => i.name === item)) {
+                    targetGroup.items.push({ name: item, isPink: true });
+                }
+            });
+
+            renderPackingChecklist();
+            document.getElementById('ai-pack-result').classList.add('hidden');
+            document.getElementById('ai-pack-input').value = '';
+            
+            const container = document.getElementById('packing-container');
+            container.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            showCustomModal("新增成功", "AI 推薦行李已順利附加到主清單底部的【🌸 AI 推薦智慧行李項目】分區，歡迎前往勾選！", true, "太棒了");
+        }
+    </script>
+</body>
+</html>
