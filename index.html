@@ -409,7 +409,7 @@
                     <div id="share-card-preview" class="w-[330px] h-[495px] rounded-2xl shadow-xl relative overflow-hidden transition-all duration-300 bg-gradient-to-br from-orange-500 to-red-600 text-white flex flex-col justify-between p-5">
                         
                         <!-- 背景層 (僅在毛玻璃版面顯示，作滿版背景) -->
-                        <img id="card-bg-full-photo" class="absolute inset-0 w-full h-full object-cover hidden z-0 brightness-[0.7]" src="" alt="" />
+                        <div id="card-bg-full-photo" class="absolute inset-0 bg-cover bg-center hidden z-0 brightness-[0.7]"></div>
 
                         <!-- 頂部資訊 (日期/Day N) -->
                         <div id="card-header-area" class="flex justify-between items-start border-b border-white/20 pb-2 z-10">
@@ -431,9 +431,9 @@
                                 <span class="text-[9px] tracking-wider text-white/80 uppercase">Wonderful Adventure</span>
                             </div>
                             <!-- 智慧環境模糊背景層：防裁切填充 -->
-                            <img id="card-classic-uploaded-img-blur" class="absolute inset-0 w-full h-full object-cover blur-md opacity-50 scale-110 hidden pointer-events-none" src="" alt="" />
-                            <!-- 上傳的真實相片 (完整含入 object-contain) -->
-                            <img id="card-classic-uploaded-img" class="absolute inset-0 w-full h-full object-contain hidden z-10" src="" alt="" />
+                            <div id="card-classic-uploaded-img-blur" class="absolute inset-0 w-full h-full bg-cover bg-center opacity-40 scale-110 hidden pointer-events-none" style="filter: blur(8px);"></div>
+                            <!-- 上傳的真實相片 (完整包含 bg-contain) -->
+                            <div id="card-classic-uploaded-img" class="absolute inset-0 w-full h-full bg-contain bg-center bg-no-repeat hidden z-10"></div>
                         </div>
 
                         <!-- 拍立得版面：相片框結構 (環境投影防裁切版) -->
@@ -443,8 +443,9 @@
                                     <i class="fa-regular fa-image text-3xl text-white/80"></i>
                                 </div>
                                 <!-- 智慧環境模糊背景層：防裁切填充 -->
-                                <img id="card-polaroid-uploaded-img-blur" class="absolute inset-0 w-full h-full object-cover blur-sm opacity-40 scale-110 hidden pointer-events-none" src="" alt="" />
-                                <img id="card-polaroid-uploaded-img" class="absolute inset-0 w-full h-full object-contain hidden z-10" src="" alt="" />
+                                <div id="card-polaroid-uploaded-img-blur" class="absolute inset-0 w-full h-full bg-cover bg-center opacity-40 scale-110 hidden pointer-events-none" style="filter: blur(8px);"></div>
+                                <!-- 上傳的真實相片 (完整包含 bg-contain) -->
+                                <div id="card-polaroid-uploaded-img" class="absolute inset-0 w-full h-full bg-contain bg-center bg-no-repeat hidden z-10"></div>
                             </div>
                             <div class="text-center mt-2.5">
                                 <span id="card-polaroid-title" class="handwritten-font text-slate-800 font-bold text-lg"></span>
@@ -1680,19 +1681,20 @@
             const fullBgImg = document.getElementById('card-bg-full-photo');
 
             if (uploadedPhotoUrl) {
-                classicImg.src = uploadedPhotoUrl;
+                // 使用 CSS background-image 進行高相容性渲染
+                classicImg.style.backgroundImage = `url('${uploadedPhotoUrl}')`;
                 classicImg.classList.remove('hidden');
-                classicImgBlur.src = uploadedPhotoUrl;
+                classicImgBlur.style.backgroundImage = `url('${uploadedPhotoUrl}')`;
                 classicImgBlur.classList.remove('hidden');
                 classicPl.classList.add('hidden');
 
-                polaroidImg.src = uploadedPhotoUrl;
+                polaroidImg.style.backgroundImage = `url('${uploadedPhotoUrl}')`;
                 polaroidImg.classList.remove('hidden');
-                polaroidImgBlur.src = uploadedPhotoUrl;
+                polaroidImgBlur.style.backgroundImage = `url('${uploadedPhotoUrl}')`;
                 polaroidImgBlur.classList.remove('hidden');
                 polaroidPl.classList.add('hidden');
 
-                fullBgImg.src = uploadedPhotoUrl;
+                fullBgImg.style.backgroundImage = `url('${uploadedPhotoUrl}')`;
                 if (currentCardLayout === 'glass') {
                     fullBgImg.classList.remove('hidden');
                 }
@@ -1762,7 +1764,7 @@
             }
 
             updateCardImages();
-            syncCardDiary(); // Re-apply adaptive sizing parameters under the new container constraints
+            syncCardDiary(); 
         }
 
         // ==================== 色調主題控制 ====================
@@ -1883,12 +1885,21 @@
             html2canvas(target, {
                 useCORS: true,       
                 scale: 3,            // 3倍無損導出
+                width: 330,          // 強制設定捕捉寬度 330px (防止白邊與偏移)
+                height: 495,         // 強制設定捕捉高度 495px
                 backgroundColor: null,
                 logging: false,
                 imageTimeout: 15000, 
                 onclone: function(clonedDoc) {
                     const clonedTarget = clonedDoc.getElementById('share-card-preview');
+                    // 消除克隆沙盒中所有可能造成位置偏移的縮放 transform，鎖定 100% 物理尺寸
                     clonedTarget.style.transform = "none"; 
+                    clonedTarget.style.width = "330px";
+                    clonedTarget.style.height = "495px";
+                    clonedTarget.style.margin = "0";
+                    clonedTarget.style.position = "relative";
+                    clonedTarget.style.top = "0";
+                    clonedTarget.style.left = "0";
                 }
             }).then(canvas => {
                 const link = document.createElement('a');
